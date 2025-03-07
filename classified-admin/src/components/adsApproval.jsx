@@ -1,36 +1,61 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FaCheckCircle, FaTimesCircle, FaEye, FaTrash } from 'react-icons/fa';
+import { adsList, adsApproval } from '../api/adminService';
 
 const AdsApproval = () => {
+  const [ads, setAds] = useState([
+  ]);
+  const [data, setData] = useState({
+    id: null,
+    status: "pending"
+  })
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const ads = await adsList();
+      setAds(ads);
+    };
+    
+    fetchData();
+  });
+
   const [activeTab, setActiveTab] = useState('pending');
   const [currentPage, setCurrentPage] = useState(1);
-  const [ads, setAds] = useState([
-    { _id: 1, title: 'Ad 1', status: 'approved' },
-    { _id: 2, title: 'Ad 2', status: 'notApproved' },
-    { _id: 3, title: 'Ad 3', status: 'pending' },
-    { _id: 4, title: 'Ad 4', status: 'approved' },
-    { _id: 5, title: 'Ad 5', status: 'pending' },
-  ]);
   
-  const adsPerPage = 2;
+  const adsPerPage = 10;
   const filteredAds = ads.filter(ad => ad.status === activeTab);
   const totalPages = Math.ceil(filteredAds.length / adsPerPage);
   const currentAds = filteredAds.slice((currentPage - 1) * adsPerPage, currentPage * adsPerPage);
 
-  const handleApprove = (id) => {
-    setAds(prevAds => prevAds.map(ad => ad._id === id ? { ...ad, status: 'approved' } : ad));
+
+  const handleApprove = async(id) => {
+    setData({
+      id,
+      status: "approved",
+    })
   };
 
   const handleNotApprove = (id) => {
-    setAds(prevAds => prevAds.map(ad => ad._id === id ? { ...ad, status: 'notApproved' } : ad));
+    setData({
+      id,
+      status: "notApproved"
+    })
   };
 
   const handleDelete = (id) => {
-    setAds(prevAds => prevAds.filter(ad => ad._id !== id));
+    setData({
+      id,
+      status: "notApproved"
+    })
   };
+
+  const updateInfo = async() => {
+    await adsApproval(data);
+  }
 
   return (
     <div className="p-4">
+      <button onClick={updateInfo}>Update to Server</button>
       <h1 className="text-2xl font-bold mb-4">Ads Approval</h1>
       <div className="flex space-x-4 border-b pb-2">
         <button onClick={() => { setActiveTab('approved'); setCurrentPage(1); }} className={`px-4 py-2 ${activeTab === 'approved' ? 'border-b-2 border-blue-500 font-bold' : ''}`}>Approved Ads</button>

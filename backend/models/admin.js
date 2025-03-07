@@ -1,10 +1,6 @@
 import mongoose, { Mongoose } from "mongoose";
 
 const adminSchema = new mongoose.Schema({
-    password:{
-        type:String,
-        required:true,
-    },
     name:{
         type:String,
         required:true,
@@ -24,10 +20,17 @@ const adminSchema = new mongoose.Schema({
         required:true,
         unique:true,
     },
+    password:{
+        type:String,
+        required:true,
+    },
     role:{
         type:String,
         required:true,
     },
+    permissions: {
+        type: [String]
+    }
 })
 
 export default mongoose.model("Admin", adminSchema)

@@ -5,7 +5,7 @@ import cors from "cors";
 import { initializeFirebase } from './firebase/firebaseAdmin.js';
 import authRoute from "./routes/auth.route.js";
 import adsRoute from "./routes/ads.route.js";
-import adminAuthRoute from "./routes/admin.rote.js"
+import adminRoute from "./routes/admin.rote.js"
 
 dotenv.config();
 
@@ -22,7 +22,7 @@ initializeFirebase();
 
 app.use("/api/auth", authRoute);
 app.use("/api/ads", adsRoute);
-app.use("/api/admin/auth", adminAuthRoute);
+app.use("/api/admin/", adminRoute);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));

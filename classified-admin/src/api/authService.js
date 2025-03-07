@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:5000/api/admin/auth"; // Backend URL
+const API_URL = "http://localhost:5000/api/admin/"; // Backend URL
 
 export const login = async(formData) => {
     try{

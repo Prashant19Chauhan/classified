@@ -1,9 +1,13 @@
 import { useState } from "react";
+import { addUserRole } from "../api/adminService";
 
 function addUser() {
   const [userData, setUserData] = useState({
     name: "",
+    username: "",
     email: "",
+    phoneNumber: "",
+    password: "",
     role: "user",
     permissions: []
   });
@@ -25,10 +29,9 @@ function addUser() {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
-    console.log("User Data Submitted:", userData);
-    // API call to add user can be made here
+    await addUserRole(userData);
   };
 
   return (
@@ -45,10 +48,37 @@ function addUser() {
           required
         />
         <input
+          type="text"
+          name="username"
+          placeholder="Username"
+          value={userData.username}
+          onChange={handleChange}
+          className="w-full p-2 border rounded"
+          required
+        />
+        <input
           type="email"
           name="email"
           placeholder="Email"
           value={userData.email}
+          onChange={handleChange}
+          className="w-full p-2 border rounded"
+          required
+        />
+        <input
+          type="number"
+          name="phoneNumber"
+          placeholder="Phone Number"
+          value={userData.phoneNumber}
+          onChange={handleChange}
+          className="w-full p-2 border rounded"
+          required
+        />
+        <input
+          type="password"
+          name="password"
+          placeholder="Password"
+          value={userData.password}
           onChange={handleChange}
           className="w-full p-2 border rounded"
           required
