@@ -1,7 +1,7 @@
 import ads from '../models/Ad.js'
 
 export const createAds = async(req, res) => {
-    const {creator, title, description, imageUrl, size, position, duration} = req.body;
+    const {creator, title, description, image, size, position, duration} = req.body;
     //needs to add condition for posting ads ++++++++++++++++++++++++++++++++++++++++++
     const isAvavilable = true;
     
@@ -10,7 +10,7 @@ export const createAds = async(req, res) => {
             creator,
             title,
             description,
-            imageUrl,
+            imageUrl:image,
             size,
             position,
             duration,
@@ -25,6 +25,29 @@ export const createAds = async(req, res) => {
 
 
 export const getAds = async(req, res) => {
-    const fetchAds = await ads.find();
+    const fetchAds = await ads.find({ status: 'approved' });
     res.status(201).json(fetchAds);
+}
+
+export const fetchadbyId = async(req, res) => {
+    try{
+        const title = req.body;
+        const checkTitle = title.title;
+        if(checkTitle === 'adss'){
+            
+            res.status(201).json({title:"sample ads", imageUrl:"/assets/ads.jpg"})
+        }
+        const adsData = await ads.findOne(title);
+        res.status(201).json(adsData);
+    }
+    catch(error){
+        console.log(error);
+    }
+}
+
+export const fetchadbyUser = async(req, res) => {
+    const userId = req.body;
+    const creator = userId.userId;
+    const adsData = await ads.find({creator});
+    res.status(201).json(adsData);
 }

@@ -5,9 +5,9 @@ const API_URL = "http://localhost:5000/api/ads"
 export const createAds = async(formData) => {
     try{
         const response = await axios.post(`${API_URL}/createAds`, formData, {
-        headers: {
-            "Content-Type": "application/json",
-          },
+            headers: {
+                "Content-Type": "application/json",
+            },
         })
         console.log(response);
     }
@@ -20,4 +20,35 @@ export const getAds = async() => {
     const response = await axios.get(`${API_URL}/getAds`);
     const data = await response.data;
     return data;
+}
+
+export const fetchadbyId = async(id) => {
+    try{
+        const response = await axios.post(`${API_URL}/getAdsbyId`, id, {
+            headers: {
+                "Content-Type": "application/json",
+            },
+        })
+        const data = await response.data;
+        return data;
+    }
+    catch(error){
+        console.log(error);
+    }
+
+}
+
+export const fetchAdsByUser = async(userId) => {
+    try{
+        const response = await axios.post(`${API_URL}/getAdsbyUser`, userId, {
+            headers: {
+                "Content-Type": "application/json",
+            },
+        })
+        const data = await response.data;
+        return data;
+    }
+    catch(error){
+        console.log(error);
+    }
 }

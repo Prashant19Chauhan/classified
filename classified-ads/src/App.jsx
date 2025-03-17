@@ -10,6 +10,7 @@ import Payment from './pages/payment';
 import Confirmation from './components/confirmation';
 import PrivateRoute from './components/PrivateRoute';
 import Logout from './components/logout';
+import Adpage from './pages/adpage';
 import { useSelector } from 'react-redux';
 
 
@@ -23,6 +24,7 @@ function App() {
         <Route path="/login" element={currentUser? <Navigate to="/"/> : <Login/>} />
         <Route path="/signup" element={currentUser? <Navigate to="/"/> : <Signup/>} />
         <Route path='/logout' element={currentUser? <Logout/> : <Navigate to="/login"/>}/>
+        <Route path='/ads/:title' element={<Adpage/>}/>
 
         {/* Dashboard with Sidebar Layout */}
         <Route element={<PrivateRoute/>}>

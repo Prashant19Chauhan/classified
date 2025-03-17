@@ -7,18 +7,70 @@ import "react-datepicker/dist/react-datepicker.css";
 
 const CreateAd = () => {
   const layoutOptions = [
-    { position:1, size: "w-full h-screen", label: "Full Width & Height - Position 1" },
-    { position:2, size: "w-full h-screen", label: "Full Width & Height - Position 2" },
-    { position:3, size: "w-[1/2] h-screen", label: "Half Width & Full Height - Position 3" },
-    { position:4, size: "w-[1/2] h-screen", label: "Half Width & Full Height - Position 4" },
-    { position:5, size: "w-full h-screen", label: "Full Width & Height - Position 5" },
-    { position:6, size: "w-[1/3] h-screen", label: "1/3 Width & Full Height - Position 6" },
-    { position:7, size: "w-[1/3] h-screen", label: "1/3 Width & Full Height - Position 7" },
-    { position:8, size: "w-[1/3] h-screen", label: "1/3 Width & Full Height - Position 8" },
-    { position:9, size: "w-[2/3] h-[1/2]", label: "2/3 Width & 1/2 Height - Position 9" },
-    { position:10, size: "w-[1/3] h-[1/2]", label: "1/3 Width & 1/2 Height - Position 10" },
-    { position:11, size: "w-[1/3] h-[1/2]", label: "1/3 Width & 1/2 Height - Position 11" },
-    { position:12, size: "w-[1/3] h-[1/2]", label: "1/3 Width & 1/2 Height - Position 12" },
+    { position:1, size: "w-[33%] h-[90vh]", label: "Position 1 row1" },
+    { position:2, size: "w-[33%] h-[90vh]", label: "Position 2 row1" },
+    { position:3, size: "w-[33%] h-[90vh]", label: "Position 3 row1" },
+    { position:4, size: "w-[24%] h-[70vh]", label: "HPosition 4 row2" },
+    { position:5, size: "w-[24%] h-[70vh]", label: "Position 5 row2" },
+    { position:6, size: "w-[24%] h-[70vh]", label: "Position 6 row2" },
+    { position:7, size: "w-[24%] h-[70vh]", label: "Position 7 row2" },
+    { position:8, size: "w-[24%] h-[70vh]", label: "Position 8 row3" },
+    { position:9, size: "w-[24%] h-[70vh]", label: "Position 9 row3" },
+    { position:10, size: "w-[24%] h-[70vh]", label: "Position 10 row3" },
+    { position:11, size: "w-[24%] h-[70vh]", label: "Position 11 row3" },
+    { position:12, size: "w-[33%] h-[90vh]", label: "Position 12 row4" },
+    { position:13, size: "w-[33%] h-[90vh]", label: "Position 13 row4" },
+    { position:14, size: "w-[33%] h-[90vh]", label: "HPosition 14 row4" },
+    { position:15, size: "w-[49%] h-[90vh]", label: "FPosition 15 row5" },
+    { position:16, size: "w-[49%] h-[90vh]", label: "Position 16 row5" },
+    { position:17, size: "w-[33%] h-[90vh]", label: "Position 17 row6" },
+    { position:18, size: "w-[33%] h-[90vh]", label: "Position 18 row6" },
+    { position:19, size: "w-[33%] h-[90vh]", label: "Position 19 row6" },
+    { position:20, size: "w-[24%] h-[70vh]", label: "Position 20 row7" },
+    { position:21, size: "w-[24%] h-[70vh]", label: "Position 21 row7" },
+    { position:22, size: "w-[24%] h-[70vh]", label: "Position 22 row7" },
+    { position:23, size: "w-[24%] h-[70vh]", label: "Position 23 row7" },
+    { position:24, size: "w-[24%] h-[70vh]", label: "Position 24 row8" },
+    { position:25, size: "w-[24%] h-[70vh]", label: "Position 25 row8" },
+    { position:26, size: "w-[24%] h-[70vh]", label: "Position 26 row8" },
+    { position:27, size: "w-[24%] h-[70vh]", label: "Position 27 row8" },
+    { position:28, size: "w-[33%] h-[90vh]", label: "Position 28 row9" },
+    { position:29, size: "w-[33%] h-[90vh]", label: "Position 29 row9" },
+    { position:30, size: "w-[33%] h-[90vh]", label: "Position 30 row9" },
+    { position:31, size: "w-[49%] h-[90vh]", label: "Position 31 row10" },
+    { position:32, size: "w-[49%] h-[90vh]", label: "Position 32 row10" },
+    { position:33, size: "w-[33%] h-[90vh]", label: "Position 33 row11" },
+    { position:34, size: "w-[33%] h-[90vh]", label: "Position 34 row11" },
+    { position:35, size: "w-[33%] h-[90vh]", label: "Position 35 row11" },
+    { position:36, size: "w-[24%] h-[70vh]", label: "HPosition 36 row12" },
+    { position:37, size: "w-[24%] h-[70vh]", label: "Position 37 row12" },
+    { position:38, size: "w-[24%] h-[70vh]", label: "Position 38 row12" },
+    { position:39, size: "w-[24%] h-[70vh]", label: "Position 39 row12" },
+    { position:40, size: "w-[24%] h-[70vh]", label: "Position 40 row13" },
+    { position:41, size: "w-[24%] h-[70vh]", label: "Position 41 row13" },
+    { position:42, size: "w-[24%] h-[70vh]", label: "Position 42 row13" },
+    { position:43, size: "w-[24%] h-[70vh]", label: "Position 43 row13" },
+    { position:44, size: "w-[33%] h-[90vh]", label: "Position 44 row14" },
+    { position:45, size: "w-[33%] h-[90vh]", label: "Position 45 row14" },
+    { position:46, size: "w-[33%] h-[90vh]", label: "HPosition 46 row14" },
+    { position:47, size: "w-[49%] h-[90vh]", label: "FPosition 47 row15" },
+    { position:48, size: "w-[49%] h-[90vh]", label: "Position 48 row15" },
+    { position:49, size: "w-[33%] h-[90vh]", label: "Position 49 row16" },
+    { position:50, size: "w-[33%] h-[90vh]", label: "Position 50 row16" },
+    { position:51, size: "w-[33%] h-[90vh]", label: "Position 51 row16" },
+    { position:52, size: "w-[24%] h-[70vh]", label: "Position 52 row17" },
+    { position:53, size: "w-[24%] h-[70vh]", label: "Position 53 row17" },
+    { position:54, size: "w-[24%] h-[70vh]", label: "Position 54 row17" },
+    { position:55, size: "w-[24%] h-[70vh]", label: "Position 55 row17" },
+    { position:56, size: "w-[24%] h-[70vh]", label: "Position 56 row18" },
+    { position:57, size: "w-[24%] h-[70vh]", label: "Position 57 row18" },
+    { position:58, size: "w-[24%] h-[70vh]", label: "Position 58 row18" },
+    { position:59, size: "w-[24%] h-[70vh]", label: "Position 59 row18" },
+    { position:60, size: "w-[33%] h-[90vh]", label: "Position 60 row19" },
+    { position:61, size: "w-[33%] h-[90vh]", label: "Position 61 row19" },
+    { position:62, size: "w-[33%] h-[90vh]", label: "Position 62 row19" },
+    { position:63, size: "w-[49%] h-[90vh]", label: "Position 63 row20" },
+    { position:64, size: "w-[49%] h-[90vh]", label: "Position 64 row20" },
   ];
 
   const [selectedLayout, setSelectedLayout] = useState(null);
@@ -33,9 +85,9 @@ const CreateAd = () => {
     title: "",
     description: "",
     size: "",
-    position: "",
+    position: 0,
     duration: 1,
-    image: null,
+    image: "",
   });
 
   const step2Handler = () => {
@@ -48,7 +100,7 @@ const CreateAd = () => {
   };
 
   const handleImageChange = (e) => {
-    setFormData({ ...formData, image: e.target.files[0] });
+    setFormData({ ...formData, image: e.target.value });
   };
 
   const handleSubmit = async (e) => {
@@ -60,7 +112,7 @@ const CreateAd = () => {
 
     try {
       await createAds(formData)
-      setFormData({ title: "", description: "", size: "full", position: "top", duration: 1, image: null });
+      setFormData({ title: "", description: "", size: "", position: "", duration: 1, image: "" });
       setStep(1);
       navigate('/payment')
 
@@ -138,7 +190,7 @@ const CreateAd = () => {
       {step === 3 && (
         <form onSubmit={handleSubmit}>
           <label className="block mt-4 mb-2">Upload Image</label>
-          <input type="file" onChange={handleImageChange} className="w-full p-2 border rounded" />
+          <input type="text" onChange={handleImageChange} className="w-full p-2 border rounded" />
           <button type="submit" className="mt-4 bg-green-600 text-white py-2 px-4 rounded">Submit Ad</button>
         </form>
       )}
