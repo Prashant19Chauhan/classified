@@ -19,17 +19,20 @@ export const login = async(req, res) => {
             return res.status(400).json({ message: "Invalid credentials!" });
         }
         else{
-            const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: "7d" });
-            res.status(200).json({
+            const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: "7d" })
+            
+            res.status(200).cookie("access_token", token,{
+                httpOnly: true,
+            }).json({
                 message: "Login successful!",
-                token,
                 user: {
                     id: user._id,
                     name: user.name,
                     email: user.email,
                     role: user.role,
+                    permissions: user.permissions,
                 }
-            });
+            })
         }
     }
 }
@@ -39,7 +42,6 @@ export const addUser = async(req, res) => {
     
     try{
         const findUser = await AdminUser.findOne({ $or: [{ email }, { username }, {phoneNumber}] });
-        console.log(findUser);
         if(!findUser){
             const hashPassword = await bcryptjs.hashSync(password, 10);
             const newUser = new AdminUser({

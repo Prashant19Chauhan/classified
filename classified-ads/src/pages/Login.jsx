@@ -1,12 +1,22 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { login } from "../api/authService";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from '../firebase';
+import { useDispatch, useSelector } from 'react-redux'
+import { loginStart, loginFailure, loginSuccess } from "../redux/userSlice";
 
 const Login = () => {
+  const { currentUser } = useSelector(state => state.user);
   const [formData, setFormData] = useState({})
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  useEffect(()=>{
+    if(currentUser){
+      navigate('/logout')
+    }
+  })
 
   const changeHandler = (e) => {
     setFormData({...formData, [e.target.id]: e.target.value.trim()})
@@ -15,12 +25,16 @@ const Login = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
+      dispatch(loginStart());
       const userCredential = await signInWithEmailAndPassword(auth, formData.email, formData.password);
       const idToken = userCredential.user.accessToken;
-      await login(idToken);
-      navigate("/dashboard");
+      const data = await login(idToken);
+      dispatch(loginSuccess(data));
+      if(data){
+        navigate('/')
+      }
     } catch (error) {
-      alert("Login failed: " + error.message);
+      dispatch(loginFailure(error.message));
     }
   };
 

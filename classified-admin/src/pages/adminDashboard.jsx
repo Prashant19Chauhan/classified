@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, Outlet } from "react-router-dom";
 import { FiHome, FiCheckSquare, FiBarChart2, FiSettings, FiUserPlus, FiMenu } from "react-icons/fi";
 
+
 const AdminDashboard = () => {
   const [isOpen, setIsOpen] = useState(true);
 

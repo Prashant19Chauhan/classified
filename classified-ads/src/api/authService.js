@@ -18,13 +18,16 @@ export const register = async (formData) => {
 }
 
 export const login = async (idToken) => {
+  console.log(idToken);
   try{
     const response = await axios.post(`${API_URL}/login`, {idToken:idToken}, {
       headers: {
         "Content-Type": "application/json",
       },
     })
-    console.log(response);
+    const data = response.data;
+    return data;
+    
   }
   catch(error){
     console.log(error)

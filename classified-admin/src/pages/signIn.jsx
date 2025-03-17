@@ -1,9 +1,12 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { login } from "../api/authService";
+import { loginStart, loginSuccess, loginFailure } from '../redux/userSlice'
+import {useDispatch} from 'react-redux'
 
 function signIn() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [error, setError] = useState("");
   const [formData, setFormData] = useState({});
 
@@ -13,7 +16,9 @@ function signIn() {
 
   const handleLogin = async(e) => {
     e.preventDefault();
-    await login(formData);
+    dispatch(loginStart());
+    const data = await login(formData);
+    dispatch(loginSuccess(data));
     navigate('/')
   }
 

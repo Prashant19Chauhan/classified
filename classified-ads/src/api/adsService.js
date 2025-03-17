@@ -15,3 +15,9 @@ export const createAds = async(formData) => {
         console.log(error);
     }
 }
+
+export const getAds = async() => {
+    const response = await axios.get(`${API_URL}/getAds`);
+    const data = await response.data;
+    return data;
+}
