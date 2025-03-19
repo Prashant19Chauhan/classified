@@ -6,9 +6,10 @@ const AdSchema = new mongoose.Schema({
   description: { type: String },
   imageUrl: { type: String },
   size: { type: String, required: true },
-  position: { type: String, required: true, unique:true },
-  duration: { type: String, required: true },
-  status: { type: String, enum: ["pending", "approved", "notApproved"], default: "pending" },
+  position: { type: String, required: true},
+  startDate: { type: Date, required: true },
+  endDate: {type: Date, required: true},
+  status: { type: String, enum: ["pending", "approved", "notApproved", "Active", "Completed"], default: "pending" },
   createdAt: { type: Date, default: Date.now },
 });
 

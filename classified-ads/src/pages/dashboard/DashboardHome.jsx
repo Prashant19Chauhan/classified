@@ -20,13 +20,16 @@ const DashboardHome = () => {
     <div className="p-6">
       <h2 className="text-xl font-bold mb-4">All Ads</h2>
       <div>
-        
+        <h3>Currently Running Ads</h3>
       </div>
       <div>
-
+        <h3>Not Approved Ads</h3>
       </div>
       <div>
-
+        <h3>Pending Ads</h3>
+      </div>
+      <div>
+        <h3>Previous Ads</h3>
       </div>
     </div>
   );

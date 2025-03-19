@@ -1,5 +1,5 @@
 import AdminUser from '../models/admin.js'
-import Ads from '../models/Ad.js'
+import adsShedule from '../models/sheduleAds.js'
 import bcryptjs from "bcryptjs";
 import jwt from "jsonwebtoken";
 
@@ -67,7 +67,7 @@ export const addUser = async(req, res) => {
 
 export const adsList = async(req, res) => {
     try{
-        const allAds = await Ads.find();
+        const allAds = await adsShedule.find();
         res.status(201).json({allAds:allAds, message:"success"});
     }
     catch(error){
@@ -78,7 +78,7 @@ export const adsList = async(req, res) => {
 export const adsApproval = async(req, res) => {
     const {id, status} = req.body;
 
-    const changeStatus = await Ads.updateOne(
+    const changeStatus = await adsShedule.updateOne(
         { _id: id },
         { $set: { status: status } }
     )

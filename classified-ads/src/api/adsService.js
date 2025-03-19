@@ -3,6 +3,7 @@ import axios from "axios";
 const API_URL = "http://localhost:5000/api/ads"
 
 export const createAds = async(formData) => {
+    console.log(formData)
     try{
         const response = await axios.post(`${API_URL}/createAds`, formData, {
             headers: {
@@ -41,6 +42,22 @@ export const fetchadbyId = async(id) => {
 export const fetchAdsByUser = async(userId) => {
     try{
         const response = await axios.post(`${API_URL}/getAdsbyUser`, userId, {
+            headers: {
+                "Content-Type": "application/json",
+            },
+        })
+        const data = await response.data;
+        return data;
+    }
+    catch(error){
+        console.log(error);
+    }
+}
+
+export const fetchAvailablePosition = async({startDate, endDate}) => {
+
+    try{
+        const response = await axios.post(`${API_URL}/getAvailableposition`, {startDate, endDate}, {
             headers: {
                 "Content-Type": "application/json",
             },
