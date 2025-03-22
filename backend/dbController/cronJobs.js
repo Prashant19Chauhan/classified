@@ -9,7 +9,7 @@ cron.schedule("* * * * *", async () => {
   
     try {
         await AdsShedule.updateMany(
-            { startDate: { $gte: new Date() }, status: "approved" },
+            { startDate: { $lte: new Date() }, status: "approved" },
             { $set: { status: "Active" } }
         );
         console.log("starting ads marked as Active.");
