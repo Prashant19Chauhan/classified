@@ -24,7 +24,7 @@ function App() {
         <Route path="/login" element={currentUser? <Navigate to="/"/> : <Login/>} />
         <Route path="/signup" element={currentUser? <Navigate to="/"/> : <Signup/>} />
         <Route path='/logout' element={currentUser? <Logout/> : <Navigate to="/login"/>}/>
-        <Route path='/ads/:title' element={<Adpage/>}/>
+        <Route path='/ads/:id' element={<Adpage/>}/>
 
         {/* Dashboard with Sidebar Layout */}
         <Route element={<PrivateRoute/>}>

@@ -34,13 +34,13 @@ export const getAds = async(req, res) => {
 
 export const fetchadbyId = async(req, res) => {
     try{
-        const title = req.body;
-        const checkTitle = title.title;
-        if(checkTitle === 'adss'){
+        const id = req.body?.id;
+        console.log(id)
+        if(id === 'sample'){
             
             res.status(201).json({title:"sample ads", imageUrl:"/assets/ads.jpg"})
         }
-        const adsData = await ads.findOne(title);
+        const adsData = await ads.findById(id);
         res.status(201).json(adsData);
     }
     catch(error){
@@ -51,7 +51,10 @@ export const fetchadbyId = async(req, res) => {
 export const fetchadbyUser = async(req, res) => {
     const userId = req.body;
     const creator = userId.userId;
-    const adsData = await ads.find({creator});
+    const activeAdsData = await ads.find({creator});
+    const sheduleAdsData = await adsShedule.find({creator});
+    const historyAdsData = await adsHistory.find({creator});
+    const adsData = {activeAdsData, sheduleAdsData, historyAdsData};
     res.status(201).json(adsData);
 }
 

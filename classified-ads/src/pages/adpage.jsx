@@ -16,7 +16,7 @@ function AdPage() {
             setAdsData(data);
         }
         fetchads();
-    },)
+    },[id])
 
   return (
     <div className="min-h-screen bg-gray-100">

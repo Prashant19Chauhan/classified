@@ -80,8 +80,8 @@ const Home = () => {
     fetchAds();
   }, []);
 
-  const showads = (title) => {
-    navigate(`/ads/${title}`)
+  const showads = (id) => {
+    navigate(`/ads/${id}`)
   }
 
   return (
@@ -95,7 +95,7 @@ const Home = () => {
             <div
               key={option.position}
               className={`bg-gray-200 rounded p-4 text-2xl text-black mb-2 ${option.size} text-center`}
-              onClick={() => showads(adForPosition?.title || "adss")}
+              onClick={() => showads(adForPosition?._id || "sample")}
             >
               {adForPosition ? (
                 <>

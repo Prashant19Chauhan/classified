@@ -35,7 +35,7 @@ cron.schedule("* * * * *", async () => {
         else{
             await AdsHistory.insertMany(adsToMoveToHistory);
             await AdsShedule.deleteMany({
-                status: "notapproved",
+                status: "notApproved",
             });
         }
 
