@@ -21,6 +21,10 @@ mongoose
 
 initializeFirebase();
 
+app.get("/api", async(req, res)=>{
+  res.json({message:"heelo world"});
+})
+
 app.use("/api/auth", authRoute);
 app.use("/api/ads", adsRoute);
 app.use("/api/admin/", adminRoute);
