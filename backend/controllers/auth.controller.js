@@ -40,6 +40,8 @@ export const register = async (req, res) => {
 
 
 export const login = async(req, res) => {
+    console.log(req.body);
+    console.log("hii");
     try {
         const {idToken} = req.body;
 
