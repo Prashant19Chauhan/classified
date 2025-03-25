@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://147.79.70.162:8800/api/ads"
+const API_URL = "http://localhost:5000/api/ads"
 
 export const createAds = async(formData) => {
     console.log(formData)
