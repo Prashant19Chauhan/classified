@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:5000/api/auth"; // Backend URL
+const API_URL = "http://147.79.70.162:8800/api/auth"; // Backend URL
 
 
 export const register = async (formData) => {
