@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const API_URL = "http://localhost:8800/api/admin/"; // Backend URL
+const API_URL = "http://localhost:8800/api/admin"; // Backend URL
 
 export const addUserRole = async(userData) => {
     const response = await axios.post(`${API_URL}/addUser`, userData, {
