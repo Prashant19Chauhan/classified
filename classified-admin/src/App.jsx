@@ -37,7 +37,7 @@ function App() {
     <Router>
       <Routes>
         {/* Redirect if user is already logged in */}
-        <Route path='/sign-in' element={currentUser ? <Navigate to="/" /> : <AddUser />} />
+        <Route path='/sign-in' element={currentUser ? <Navigate to="/" /> : <SignIn />} />
 
         {/* Protect Routes - Only allow access if logged in */}
         <Route path='/' element={currentUser ? <AdminDashboard permissions={permissions}/> : <Navigate to="/sign-in" />}>
