@@ -30,5 +30,5 @@ app.use("/api/ads", adsRoute);
 app.use("/api/admin/", adminRoute);
 
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 8800;
 app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT} welcome`));
