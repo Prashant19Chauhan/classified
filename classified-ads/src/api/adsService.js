@@ -1,6 +1,7 @@
 import axios from "axios";
 
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8800/api/ads"
+const API_URL = `${import.meta.env.VITE_API_URL ? import.meta.env.VITE_API_URL : "http://localhost:8800"}/api/admin`;
+
 
 export const createAds = async(formData) => {
     console.log(formData)
@@ -40,6 +41,7 @@ export const fetchadbyId = async(id) => {
 }
 
 export const fetchAdsByUser = async(userId) => {
+    console.log(userId)
     try{
         const response = await axios.post(`${API_URL}/getAdsbyUser`, userId, {
             headers: {
