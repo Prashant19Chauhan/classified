@@ -1,6 +1,9 @@
 import axios from 'axios'
+import dotenv from 'dotenv';
 
-const API_URL = "http://api.ujalaclassified.com/api/admin"; // Backend URL
+dotenv.config();
+
+const API_URL = process.env.API_URL || "http://localhost:8800/api/admin";
 
 export const addUserRole = async(userData) => {
     const response = await axios.post(`${API_URL}/addUser`, userData, {

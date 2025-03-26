@@ -1,6 +1,9 @@
 import axios from "axios";
+import dotenv from "dotenv";
 
-const API_URL = "http://localhost:8800/api/ads"
+dotenv.config();
+
+const API_URL = process.env.API_URL || "http://localhost:8800/api/ads"
 
 export const createAds = async(formData) => {
     console.log(formData)

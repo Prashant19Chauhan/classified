@@ -1,6 +1,9 @@
 import axios from "axios";
+import dotenv from 'dotenv';
 
-const API_URL = "http://localhost:8800/api/auth"; // Backend URL
+dotenv.config();
+
+const API_URL = process.env.API_URL || "http://localhost:8800/api/auth"; // Backend URL
 
 
 export const register = async (formData) => {
