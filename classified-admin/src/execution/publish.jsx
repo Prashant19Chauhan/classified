@@ -13,12 +13,7 @@ function Publish() {
   });
 
   const changeHandler = (e) => {
-    const { name, type, files, value } = e.target;
-    if (type === "file") {
-      setFormData((prev) => ({ ...prev, [name]: files[0] }));
-    } else {
-      setFormData((prev) => ({ ...prev, [name]: value }));
-    }
+    setFormData({...formData, [e.target.name]: e.target.value})
   };
 
   const formHandler = async (e) => {
