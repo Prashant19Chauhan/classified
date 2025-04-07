@@ -56,18 +56,26 @@ export const fetchAdsByUser = async(userId) => {
     }
 }
 
-export const fetchAvailablePosition = async({startDate, endDate}) => {
+export const fetchDuration = async() => {
+    const response = await axios.get(`${API_URL}/getDuration`);
+    console.log(response.data)
+    return await response.data;
+}
 
-    try{
-        const response = await axios.post(`${API_URL}/getAvailableposition`, {startDate, endDate}, {
-            headers: {
-                "Content-Type": "application/json",
-            },
-        })
-        const data = await response.data;
-        return data;
-    }
-    catch(error){
-        console.log(error);
-    }
+export const fetchpages = async(duration) => {
+    const response = await axios.post(`${API_URL}/getPages`, {duration}, {
+        headers: {
+            "Content-Type": "application/json",
+        },
+    });
+    return await response.data;
+}
+
+export const fetchAvailablePages = async(duration) => {
+    const response = await axios.post(`${API_URL}/availablePage`, {duration}, {
+        headers: {
+            "Content-Type": "application/json",
+        },
+    })
+    return await response.data;
 }

@@ -5,12 +5,10 @@ const AdSchema = new mongoose.Schema({
   title: { type: String, required: true },
   description: { type: String },
   imageUrl: { type: String },
-  size: { type: String, required: true },
   position: { type: String, required: true},
-  startDate: { type: Date, required: true },
-  endDate: {type: Date, required: true},
+  duration: { type: String, required: true },
   status: { type: String, enum: ["pending", "approved", "notApproved", "Active", "Completed"], default: "pending" },
   createdAt: { type: Date, default: Date.now },
 });
 
-export default mongoose.model("Ad", AdSchema);
+export default mongoose.model("ad", AdSchema);

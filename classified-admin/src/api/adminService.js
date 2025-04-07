@@ -27,3 +27,37 @@ export const adsApproval = async(data) => {
     })
     console.log(response);
 }
+
+export const publishClassified = async(formData) => {
+    const response = await axios.post(`${API_URL}/publish`, formData, {
+        headers: {
+            "Content-Type" : "application/json",
+        },
+    })
+    const data = await response.data;
+    return data;
+}
+
+export const setClassified = async(durations, numberOfPages, pageLayouts) => {
+    console.log(durations);
+    const response = await axios.post(`${API_URL}/settings`, {durations, numberOfPages, pageLayouts}, {
+        headers: {
+            "Content-Type" : "application/json",
+        }
+    })
+    return await response.data;
+}
+
+export const fetchDuration = async() => {
+    const response = await axios.get(`${API_URL}/getDuration`);
+    return await response.data;
+}
+
+export const fetchpages = async(duration) => {
+    const response = await axios.post(`${API_URL}/getPages`, {duration}, {
+        headers: {
+            "Content-Type": "application/json",
+        },
+    });
+    return await response.data;
+}

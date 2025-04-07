@@ -1,30 +1,87 @@
-import { Link, Outlet } from "react-router-dom";
-import { useDispatch } from 'react-redux'
-import { logout } from '../redux/userSlice'
+import { useState } from "react";
+import { Link, Outlet, useLocation } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { logout } from "../redux/userSlice";
+import {
+  MdDashboard,
+  MdAddBox,
+  MdSettings,
+  MdLogout,
+  MdMenu,
+  MdClose,
+} from "react-icons/md";
 
 const DashboardLayout = () => {
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const dispatch = useDispatch();
-    const logoutHandler = () => {
-        dispatch(logout());
-    }
+  const location = useLocation();
+
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
+
+  const logoutHandler = () => {
+    dispatch(logout());
+  };
+
+  const navItems = [
+    { label: "My Ads", to: "/dashboard", icon: <MdDashboard size={24} /> },
+    { label: "Create Ad", to: "/dashboard/create-ad", icon: <MdAddBox size={24} /> },
+    { label: "Settings", to: "/dashboard/settings", icon: <MdSettings size={24} /> },
+  ];
 
   return (
     <div className="flex min-h-screen bg-gray-900 text-white">
       {/* Sidebar */}
-      <aside className="w-64 bg-gray-800 p-6 space-y-6">
-        <h2 className="text-2xl font-bold">📊 Dashboard</h2>
+      <aside
+        className={`bg-gray-800 h-screen p-4 space-y-6 transition-all duration-300 ${
+          isSidebarOpen ? "w-64" : "w-20"
+        }`}
+      >
+        {/* Toggle Button */}
+        <button
+          onClick={toggleSidebar}
+          className="text-white mb-4 focus:outline-none"
+        >
+          {isSidebarOpen ? <MdClose size={26} /> : <MdMenu size={26} />}
+        </button>
 
-        <nav className="space-y-4">
-          <Link to="/dashboard" className="block py-2 px-4 bg-gray-700 rounded">🏠 My Ads</Link>
-          <Link to="/dashboard/create-ad" className="block py-2 px-4 bg-gray-700 rounded">➕ Create Ad</Link>
-          <Link to="/dashboard/settings" className="block py-2 px-4 bg-gray-700 rounded">⚙️ Settings</Link>
+        {/* Title */}
+        {isSidebarOpen && (
+          <h2 className="text-2xl font-bold text-blue-400">Dashboard</h2>
+        )}
+
+        {/* Navigation */}
+        <nav className="space-y-3">
+          {navItems.map(({ label, to, icon }) => {
+            const isActive = location.pathname === to;
+            return (
+              <Link
+                key={to}
+                to={to}
+                className={`flex items-center gap-4 py-2 px-4 rounded transition duration-200 ${
+                  isActive ? "bg-blue-600" : "bg-gray-700 hover:bg-gray-600"
+                }`}
+              >
+                {icon}
+                {isSidebarOpen && <span>{label}</span>}
+              </Link>
+            );
+          })}
         </nav>
 
-        <button className="mt-6 w-full py-2 px-4 bg-red-500 rounded" onClick={logoutHandler}>🚪 Logout</button>
+        {/* Logout */}
+        <button
+          onClick={logoutHandler}
+          className="flex items-center gap-4 w-full py-2 px-4 bg-red-600 hover:bg-red-500 rounded transition"
+        >
+          <MdLogout size={24} />
+          {isSidebarOpen && <span>Logout</span>}
+        </button>
       </aside>
 
-      {/* Content Area */}
-      <main className="flex-1 p-6">
+      {/* Main Content */}
+      <main className="flex-1 p-6 overflow-auto">
         <Outlet />
       </main>
     </div>

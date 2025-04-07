@@ -1,10 +1,11 @@
 import ads from '../models/Ad.js'
 import adsHistory from '../models/adsHistory.js';
-import adsShedule from '../models/sheduleAds.js'
+import classified from '../models/classified.js';
+import adsShedule from '../models/sheduleAds.js';
+import setting from '../models/setting.js'
 
 export const createAds = async(req, res) => {
-    const {creator, title, description, image, size, position, startDate, endDate} = req.body;
-    //needs to add condition for posting ads ++++++++++++++++++++++++++++++++++++++++++
+    const {creator, title, description, position, duration, image} = req.body;
     const isAvavilable = true;
     
     if(isAvavilable){
@@ -13,10 +14,8 @@ export const createAds = async(req, res) => {
             title,
             description,
             imageUrl:image,
-            size,
             position,
-            startDate,
-            endDate,
+            duration,
         })
         await newAds.save();
         return res.status(201).json({message: "success"})
@@ -28,25 +27,10 @@ export const createAds = async(req, res) => {
 
 
 export const getAds = async(req, res) => {
-    const fetchAds = await ads.find({ status: 'Active' });
+    const fetchAds = await classified.find();
     res.status(201).json(fetchAds);
 }
 
-export const fetchadbyId = async(req, res) => {
-    try{
-        const id = req.body?.id;
-        console.log(id)
-        if(id === 'sample'){
-            
-            res.status(201).json({title:"sample ads", imageUrl:"/assets/ads.jpg"})
-        }
-        const adsData = await ads.findById(id);
-        res.status(201).json(adsData);
-    }
-    catch(error){
-        console.log(error);
-    }
-}
 
 export const fetchadbyUser = async(req, res) => {
     const userId = req.body;
@@ -58,63 +42,30 @@ export const fetchadbyUser = async(req, res) => {
     res.status(201).json(adsData);
 }
 
-export const findPosition = async(req, res) => {
-    const {startDate, endDate} = req.body;
+export const getDuration = async(req, res) => {
+    const getData = await setting.find({
+        status: "Active"
+    })
+    const durations = getData.flatMap(item => item.durations);
+    console.log(durations)
+    res.status(200).json(durations)
+}
 
-    try{
-        const start = new Date(startDate);
-        const end = endDate? new Date(endDate) : null ;
+export const getPages = async(req, res) => {
+    const { duration } = req.body;
+    const getData = await setting.findOne({
+        status: "Active",
+        "durations.value": duration,
+    });
+    const pages = getData.numberOfPages;
+    res.status(200).json(pages)
+}
 
-        let overlappingAds = await adsShedule.find({
-            $or: [
-                {
-                    startDate: {$lte: start},
-                    endDate: {$gte: start},
-                },
-                end
-                ?{
-                    $or: [
-                        { startDate: { $gte: start, $lte: end } },
-                        { endDate: { $gte: start, $lte: end } },
-                        { startDate: { $lte: start }, endDate: { $gte: end } }
-                    ]
-                }
-                :null
-            ].filter(Boolean)
-        })
-
-        let overlappingAds1 = await ads.find({
-            $or: [
-                {
-                    startDate: {$lte: start},
-                    endDate: {$gte: start},
-                },
-                end
-                ?{
-                    $or: [
-                        { startDate: { $gte: start, $lte: end } },
-                        { endDate: { $gte: start, $lte: end } },
-                        { startDate: { $lte: start }, endDate: { $gte: end } }
-                    ]
-                }
-                :null
-            ].filter(Boolean)
-        })
-        console.log(overlappingAds1);
-
-        const allPositions =  Array.from({ length: 64 }, (_, i) => i + 1); 
-
-        let unavailablePosition = overlappingAds.map((ad) => Number(ad.position));
-        unavailablePosition = overlappingAds1.map((ad) => Number(ad.position));
-
-        const availablePositions = allPositions.filter(
-            (pos) => !unavailablePosition.includes(pos)
-        );
-        console.log(availablePositions);
-        res.status(201).json(availablePositions);
-
-    }
-    catch(error){
-        console.log(error);
-    }
+export const getAvailablePages = async(req, res) => {
+    const { duration } = req.body;
+    const getData = await adsShedule.find({
+        duration
+    })
+    const position = getData.map(item => item.position);
+    res.status(200).json(position)
 }

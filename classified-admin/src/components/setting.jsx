@@ -1,6 +1,7 @@
 import { useState } from "react";
+import { FiUser, FiMail, FiPhone, FiLock } from "react-icons/fi";
 
-function setting() {
+function Setting() {
   const [adminInfo, setAdminInfo] = useState({
     name: "Admin Name",
     email: "admin@example.com",
@@ -16,51 +17,76 @@ function setting() {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("Admin Info Updated:", adminInfo);
-    // API call to update admin details can be made here
+    // TODO: Add API call here
   };
 
   return (
-    <div className="p-6 bg-white rounded shadow-md w-1/2 mx-auto">
-      <h2 className="text-xl font-semibold mb-4">Admin Settings</h2>
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <input
-          type="text"
-          name="name"
-          placeholder="Name"
-          value={adminInfo.name}
-          onChange={handleChange}
-          className="w-full p-2 border rounded"
-          required
-        />
-        <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          value={adminInfo.email}
-          onChange={handleChange}
-          className="w-full p-2 border rounded"
-          required
-        />
-        <input
-          type="text"
-          name="phone"
-          placeholder="Phone Number"
-          value={adminInfo.phone}
-          onChange={handleChange}
-          className="w-full p-2 border rounded"
-        />
-        <input
-          type="password"
-          name="password"
-          placeholder="New Password"
-          value={adminInfo.password}
-          onChange={handleChange}
-          className="w-full p-2 border rounded"
-        />
-        <button type="submit" className="bg-green-500 text-white p-2 rounded">Update Info</button>
-      </form>
+    <div className="min-h-screen bg-gray-100 flex items-center justify-center px-4 py-10">
+      <div className="bg-white p-8 rounded-xl shadow-md w-full max-w-lg">
+        <h2 className="text-2xl font-semibold text-center text-gray-800 mb-6">
+          Admin Settings
+        </h2>
+        <form onSubmit={handleSubmit} className="space-y-5">
+          <div className="flex items-center border rounded px-3 py-2">
+            <FiUser className="text-gray-400 mr-2" />
+            <input
+              type="text"
+              name="name"
+              placeholder="Name"
+              value={adminInfo.name}
+              onChange={handleChange}
+              className="w-full outline-none"
+              required
+            />
+          </div>
+
+          <div className="flex items-center border rounded px-3 py-2">
+            <FiMail className="text-gray-400 mr-2" />
+            <input
+              type="email"
+              name="email"
+              placeholder="Email"
+              value={adminInfo.email}
+              onChange={handleChange}
+              className="w-full outline-none"
+              required
+            />
+          </div>
+
+          <div className="flex items-center border rounded px-3 py-2">
+            <FiPhone className="text-gray-400 mr-2" />
+            <input
+              type="text"
+              name="phone"
+              placeholder="Phone Number"
+              value={adminInfo.phone}
+              onChange={handleChange}
+              className="w-full outline-none"
+            />
+          </div>
+
+          <div className="flex items-center border rounded px-3 py-2">
+            <FiLock className="text-gray-400 mr-2" />
+            <input
+              type="password"
+              name="password"
+              placeholder="New Password"
+              value={adminInfo.password}
+              onChange={handleChange}
+              className="w-full outline-none"
+            />
+          </div>
+
+          <button
+            type="submit"
+            className="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700 transition duration-200"
+          >
+            Update Info
+          </button>
+        </form>
+      </div>
     </div>
   );
 }
 
-export default setting
+export default Setting;

@@ -6,7 +6,6 @@ import { initializeFirebase } from './firebase/firebaseAdmin.js';
 import authRoute from "./routes/auth.route.js";
 import adsRoute from "./routes/ads.route.js";
 import adminRoute from "./routes/admin.rote.js"
-import "./dbController/cronJobs.js"
 
 dotenv.config();
 
@@ -27,7 +26,7 @@ app.get("/api", async(req, res)=>{
 
 app.use("/api/auth", authRoute);
 app.use("/api/ads", adsRoute);
-app.use("/api/admin/", adminRoute);
+app.use("/api/admin", adminRoute);
 
 
 const PORT = process.env.PORT || 8800;
