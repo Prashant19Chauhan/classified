@@ -28,6 +28,16 @@ app.use("/api/auth", authRoute);
 app.use("/api/ads", adsRoute);
 app.use("/api/admin", adminRoute);
 
+app.use((err, req, res, next)=>{
+  const statusCode = err.statusCode || 500;
+  const message = err.message || "internal server error";
+  res.status(statusCode).json({
+      success: false,
+      statusCode,
+      message
+  });
+});
+
 
 const PORT = process.env.PORT || 8800;
 app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));

@@ -1,71 +1,138 @@
-import ads from '../models/Ad.js'
+import ads from '../models/Ad.js';
 import adsHistory from '../models/adsHistory.js';
 import classified from '../models/classified.js';
-import adsShedule from '../models/sheduleAds.js';
-import setting from '../models/setting.js'
+import adsSchedule from '../models/sheduleAds.js';
+import setting from '../models/setting.js';
+import { errorHandler } from '../utils/error.js';
 
-export const createAds = async(req, res) => {
-    const {creator, title, description, position, duration, image} = req.body;
-    const isAvavilable = true;
-    
-    if(isAvavilable){
-        const newAds = new adsShedule({
-            creator,
-            title,
-            description,
-            imageUrl:image,
-            position,
-            duration,
-        })
-        await newAds.save();
-        return res.status(201).json({message: "success"})
+// ✅ Create New Ad
+export const createAds = async (req, res, next) => {
+  try {
+    const { creator, title, description, position, duration, image } = req.body;
+
+    if (!creator || !title || !position || !duration || !image) {
+      return next(errorHandler(400, "All required fields must be provided"));
     }
-    else{
-        return res.status(400).json({message: "fail"})
+
+    // Check for existing ad at same position and duration
+    const existingAd = await adsSchedule.findOne({ position, duration });
+    if (existingAd) {
+      return next(errorHandler(409, "An ad already exists for this position and duration"));
     }
-}
 
-
-export const getAds = async(req, res) => {
-    const fetchAds = await classified.find();
-    res.status(201).json(fetchAds);
-}
-
-
-export const fetchadbyUser = async(req, res) => {
-    const userId = req.body;
-    const creator = userId.userId;
-    const activeAdsData = await ads.find({creator});
-    const sheduleAdsData = await adsShedule.find({creator});
-    const historyAdsData = await adsHistory.find({creator});
-    const adsData = {activeAdsData, sheduleAdsData, historyAdsData};
-    res.status(201).json(adsData);
-}
-
-export const getDuration = async(req, res) => {
-    const getData = await setting.find({
-        status: "Active"
-    })
-    const durations = getData.flatMap(item => item.durations);
-    console.log(durations)
-    res.status(200).json(durations)
-}
-
-export const getPages = async(req, res) => {
-    const { duration } = req.body;
-    const getData = await setting.findOne({
-        status: "Active",
-        "durations.value": duration,
+    const newAd = new adsSchedule({
+      creator,
+      title,
+      description,
+      imageUrl: image,
+      position,
+      duration,
     });
-    const pages = getData.numberOfPages;
-    res.status(200).json(pages)
-}
 
-export const getAvailablePages = async(req, res) => {
+    await newAd.save();
+    return res.status(201).json({ success: true, message: "Advertisement created successfully." });
+
+  } catch (error) {
+    return next(errorHandler(500, "Failed to create advertisement"));
+  }
+};
+
+// ✅ Get All Classified Ads
+export const getAds = async (req, res, next) => {
+  try {
+    const fetchAds = await classified.find();
+    return res.status(200).json(fetchAds);
+  } catch (error) {
+    return next(errorHandler(500, "Failed to fetch classified ads"));
+  }
+};
+
+// ✅ Get Ads by User ID
+export const fetchadbyUser = async (req, res, next) => {
+  try {
+    const { userId } = req.body;
+
+    if (!userId || !userId.userId) {
+      return next(errorHandler(400, "User ID is required"));
+    }
+
+    const creator = userId.userId;
+
+    const [activeAdsData, sheduleAdsData, historyAdsData] = await Promise.all([
+      ads.find({ creator }),
+      adsSchedule.find({ creator }),
+      adsHistory.find({ creator }),
+    ]);
+
+    return res.status(200).json({ activeAdsData, sheduleAdsData, historyAdsData });
+
+  } catch (error) {
+    return next(errorHandler(500, "Failed to fetch user ads"));
+  }
+};
+
+// ✅ Get All Active Durations
+export const getDuration = async (req, res, next) => {
+  try {
+    const getData = await setting.find({ status: "Active" });
+
+    if (!getData || getData.length === 0) {
+      return next(errorHandler(404, "No active durations found"));
+    }
+
+    const durations = getData.flatMap(item => item.durations);
+    return res.status(200).json(durations);
+
+  } catch (error) {
+    return next(errorHandler(500, "Failed to fetch durations"));
+  }
+};
+
+// ✅ Get Total Pages for Given Duration
+export const getPages = async (req, res, next) => {
+  try {
     const { duration } = req.body;
-    const getData = await adsShedule.find({
-        duration
-    })
-    const position = getData.map(item => item.position);
-    res.status(200).json(position)
-}
+
+    if (!duration) {
+      return next(errorHandler(400, "Duration is required"));
+    }
+
+    const getData = await setting.findOne({
+      status: "Active",
+      "durations.value": duration,
+    });
+
+    if (!getData) {
+      return next(errorHandler(404, "No matching duration found"));
+    }
+
+    const pages = getData.numberOfPages;
+    return res.status(200).json(pages);
+
+  } catch (error) {
+    return next(errorHandler(500, "Failed to fetch number of pages"));
+  }
+};
+
+// ✅ Get Already Occupied Pages for Duration
+export const getAvailablePages = async (req, res, next) => {
+  try {
+    const { duration } = req.body;
+
+    if (!duration) {
+      return next(errorHandler(400, "Duration is required"));
+    }
+
+    const getData = await adsSchedule.find({ duration });
+
+    if (!getData || getData.length === 0) {
+      return res.status(200).json([]); // no occupied positions, all available
+    }
+
+    const positions = getData.map(item => item.position);
+    return res.status(200).json(positions);
+
+  } catch (error) {
+    return next(errorHandler(500, "Failed to fetch occupied pages"));
+  }
+};

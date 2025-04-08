@@ -4,21 +4,23 @@ const API_URL = `${import.meta.env.VITE_API_URL ? import.meta.env.VITE_API_URL :
 
 
 export const register = async (formData) => {
-  try{
+  try {
     const response = await axios.post(`${API_URL}/register`, formData, {
       headers: {
         "Content-Type": "application/json",
       },
-    })
-    console.log(response);
+    });
+    return response;
+  } catch (error) {
+    throw new Error(
+      error.response?.data?.message || "Something went wrong during registration"
+    );
   }
-  catch(error){
-    console.log(error);
-  }
-}
+};
+
+
 
 export const login = async (idToken) => {
-  console.log(idToken);
   try{
     const response = await axios.post(`${API_URL}/login`, {idToken:idToken}, {
       headers: {
@@ -30,6 +32,6 @@ export const login = async (idToken) => {
     
   }
   catch(error){
-    console.log(error)
+    return error
   }
 }

@@ -1,81 +1,98 @@
 import axios from "axios";
 
-const API_URL = `${import.meta.env.VITE_API_URL ? import.meta.env.VITE_API_URL : "http://localhost:8800"}/api/ads`;
+const API_URL = `${import.meta.env.VITE_API_URL || "http://localhost:8800"}/api/ads`;
 
+const config = {
+  headers: {
+    "Content-Type": "application/json",
+  },
+};
 
-export const createAds = async(formData) => {
-    console.log(formData)
-    try{
-        const response = await axios.post(`${API_URL}/createAds`, formData, {
-            headers: {
-                "Content-Type": "application/json",
-            },
-        })
-        console.log(response);
+// ✅ Create Ad
+export const createAds = async (formData) => {
+  try {
+    const response = await axios.post(`${API_URL}/createAds`, formData, config);
+    const { status, data } = response;
+
+    if (status === 200 || status === 201) {
+      return {
+        success: true,
+        data,
+        message: "Ad created successfully",
+      };
     }
-    catch(error){
-        console.log(error);
-    }
-}
 
-export const getAds = async() => {
+    return {
+      success: false,
+      message: "Unexpected server response",
+    };
+  } catch (error) {
+    return {
+      success: false,
+      message:
+        error?.response?.data?.message || "Something went wrong while creating the ad.",
+    };
+  }
+};
+
+// ✅ Get All Classified Ads
+export const getAds = async () => {
+  try {
     const response = await axios.get(`${API_URL}/getAds`);
-    const data = await response.data;
-    return data;
-}
+    return response.data;
+  } catch (error) {
+    throw new Error("Failed to fetch ads");
+  }
+};
 
-export const fetchadbyId = async(id) => {
-    try{
-        const response = await axios.post(`${API_URL}/getAdsbyId`, id, {
-            headers: {
-                "Content-Type": "application/json",
-            },
-        })
-        const data = await response.data;
-        return data;
-    }
-    catch(error){
-        console.log(error);
-    }
+// ✅ Get Ad by ID
+export const fetchadbyId = async (id) => {
+  try {
+    const response = await axios.post(`${API_URL}/getAdsbyId`, id, config);
+    return response.data;
+  } catch (error) {
+    throw new Error("Failed to fetch ad by ID");
+  }
+};
 
-}
+// ✅ Get Ads by User
+export const fetchAdsByUser = async (userId) => {
+  try {
+    const response = await axios.post(`${API_URL}/getAdsbyUser`, { userId }, config);
+    return response.data;
+  } catch (error) {
+    throw new Error(
+      error?.response?.data?.message || "Failed to fetch ads by user"
+    );
+  }
+};
 
-export const fetchAdsByUser = async(userId) => {
-    console.log(userId)
-    try{
-        const response = await axios.post(`${API_URL}/getAdsbyUser`, userId, {
-            headers: {
-                "Content-Type": "application/json",
-            },
-        })
-        const data = await response.data;
-        return data;
-    }
-    catch(error){
-        console.log(error);
-    }
-}
-
-export const fetchDuration = async() => {
+// ✅ Get Available Durations
+export const fetchDuration = async () => {
+  try {
     const response = await axios.get(`${API_URL}/getDuration`);
-    console.log(response.data)
-    return await response.data;
-}
+    return response.data;
+  } catch (error) {
+    throw new Error("Failed to fetch durations");
+  }
+};
 
-export const fetchpages = async(duration) => {
-    const response = await axios.post(`${API_URL}/getPages`, {duration}, {
-        headers: {
-            "Content-Type": "application/json",
-        },
-    });
-    return await response.data;
-}
+// ✅ Get Total Pages for Given Duration
+export const fetchpages = async (duration) => {
+  try {
+    const response = await axios.post(`${API_URL}/getPages`, { duration }, config);
+    return response.data;
+  } catch (error) {
+    throw new Error("Failed to fetch pages");
+  }
+};
 
-export const fetchAvailablePages = async(duration) => {
-    const response = await axios.post(`${API_URL}/availablePage`, {duration}, {
-        headers: {
-            "Content-Type": "application/json",
-        },
-    })
-    return await response.data;
-}
+// ✅ Get Occupied Page Positions
+export const fetchAvailablePages = async (duration) => {
+  try {
+    const response = await axios.post(`${API_URL}/availablePage`, { duration }, config);
+    return response.data;
+  } catch (error) {
+    throw new Error("Failed to fetch available pages");
+  }
+};

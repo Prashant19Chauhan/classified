@@ -1,94 +1,132 @@
 import React, { useEffect, useState } from 'react';
 import { FaCheckCircle, FaTimesCircle, FaEye, FaTrash } from 'react-icons/fa';
 import { adsList, adsApproval } from '../api/adminService';
+import toast, { Toaster } from 'react-hot-toast';
 
 const AdsApproval = () => {
-  const [ads, setAds] = useState([
-  ]);
-  const [data, setData] = useState({
-    id: null,
-    status: "pending"
-  })
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const ads = await adsList();
-      setAds(ads);
-    };
-    
-    fetchData();
-  });
-
+  const [ads, setAds] = useState([]);
   const [activeTab, setActiveTab] = useState('pending');
   const [currentPage, setCurrentPage] = useState(1);
-  
+  const [loading, setLoading] = useState(false);
+
   const adsPerPage = 10;
-  const filteredAds = ads.filter(ad => ad.status === activeTab);
+
+  const fetchAds = async () => {
+    try {
+      setLoading(true);
+      const result = await adsList();
+      setAds(result);
+    } catch (err) {
+      toast.error("Failed to load ads.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchAds();
+  }, []);
+
+  const filteredAds = ads.filter((ad) => ad.status === activeTab);
   const totalPages = Math.ceil(filteredAds.length / adsPerPage);
-  const currentAds = filteredAds.slice((currentPage - 1) * adsPerPage, currentPage * adsPerPage);
+  const currentAds = filteredAds.slice(
+    (currentPage - 1) * adsPerPage,
+    currentPage * adsPerPage
+  );
 
-
-  const handleApprove = async(id) => {
-    setData({
-      id,
-      status: "approved",
-    })
+  const handleStatusUpdate = async (id, status) => {
+    try {
+      await adsApproval({ id, status });
+      toast.success(`Ad ${status === 'approved' ? 'approved' : status === 'notApproved' ? 'disapproved' : 'deleted'} successfully`);
+      await fetchAds();
+    } catch (err) {
+      toast.error("Failed to update ad status.");
+    }
   };
 
-  const handleNotApprove = (id) => {
-    setData({
-      id,
-      status: "notApproved"
-    })
+  const handleDelete = async (id) => {
+    const confirmDelete = window.confirm("Are you sure you want to delete this ad?");
+    if (confirmDelete) {
+      await handleStatusUpdate(id, "notApproved");
+    }
   };
-
-  const handleDelete = (id) => {
-    setData({
-      id,
-      status: "notApproved"
-    })
-  };
-
-  const updateInfo = async() => {
-    await adsApproval(data);
-  }
 
   return (
     <div className="p-4">
-      <button onClick={updateInfo}>Update to Server</button>
+      <Toaster />
       <h1 className="text-2xl font-bold mb-4">Ads Approval</h1>
+
+      {/* Tabs */}
       <div className="flex space-x-4 border-b pb-2">
-        <button onClick={() => { setActiveTab('approved'); setCurrentPage(1); }} className={`px-4 py-2 ${activeTab === 'approved' ? 'border-b-2 border-blue-500 font-bold' : ''}`}>Approved Ads</button>
-        <button onClick={() => { setActiveTab('notApproved'); setCurrentPage(1); }} className={`px-4 py-2 ${activeTab === 'notApproved' ? 'border-b-2 border-blue-500 font-bold' : ''}`}>Not Approved Ads</button>
-        <button onClick={() => { setActiveTab('pending'); setCurrentPage(1); }} className={`px-4 py-2 ${activeTab === 'pending' ? 'border-b-2 border-blue-500 font-bold' : ''}`}>Pending Approval</button>
+        {["approved", "notApproved", "pending"].map((status) => (
+          <button
+            key={status}
+            onClick={() => {
+              setActiveTab(status);
+              setCurrentPage(1);
+            }}
+            className={`px-4 py-2 capitalize ${
+              activeTab === status
+                ? "border-b-2 border-blue-500 font-bold text-blue-600"
+                : "text-gray-600"
+            }`}
+          >
+            {status === 'notApproved' ? 'Not Approved' : status} Ads
+          </button>
+        ))}
       </div>
 
+      {/* Loading */}
+      {loading && (
+        <div className="mt-4 text-center text-blue-600 font-semibold">Loading ads...</div>
+      )}
+
+      {/* Ads List */}
       <div className="mt-4">
-        {currentAds.map(ad => (
-          <div key={ad._id} className="border p-2 my-2 flex justify-between items-center">
-            <span>{ad.title}</span>
+        {!loading && currentAds.length === 0 && (
+          <p className="text-gray-500 text-center">No ads found in this category.</p>
+        )}
+
+        {currentAds.map((ad) => (
+          <div
+            key={ad._id}
+            className="border p-3 my-2 flex justify-between items-center rounded-md shadow-sm bg-white"
+          >
+            <span className="font-medium text-gray-800">{ad.title}</span>
             <div className="space-x-2 flex">
               {activeTab === 'approved' && (
-                <button onClick={() => handleDelete(ad._id)} className="p-2 bg-red-500 text-white rounded">
+                <button
+                  onClick={() => handleDelete(ad._id)}
+                  className="p-2 bg-red-500 text-white rounded hover:bg-red-600"
+                >
                   <FaTrash size={18} />
                 </button>
               )}
               {activeTab === 'notApproved' && (
-                <button onClick={() => handleApprove(ad._id)} className="p-2 bg-green-500 text-white rounded">
+                <button
+                  onClick={() => handleStatusUpdate(ad._id, "approved")}
+                  className="p-2 bg-green-500 text-white rounded hover:bg-green-600"
+                >
                   <FaCheckCircle size={18} />
                 </button>
               )}
               {activeTab === 'pending' && (
                 <>
-                  <button onClick={() => handleApprove(ad._id)} className="p-2 bg-green-500 text-white rounded">
+                  <button
+                    onClick={() => handleStatusUpdate(ad._id, "approved")}
+                    className="p-2 bg-green-500 text-white rounded hover:bg-green-600"
+                  >
                     <FaCheckCircle size={18} />
                   </button>
-                  <button onClick={() => handleNotApprove(ad._id)} className="p-2 bg-yellow-500 text-white rounded">
+                  <button
+                    onClick={() => handleStatusUpdate(ad._id, "notApproved")}
+                    className="p-2 bg-yellow-500 text-white rounded hover:bg-yellow-600"
+                  >
                     <FaTimesCircle size={18} />
                   </button>
                 </>
               )}
-              <button className="p-2 bg-blue-500 text-white rounded">
+              <button className="p-2 bg-blue-500 text-white rounded hover:bg-blue-600">
                 <FaEye size={18} />
               </button>
             </div>
@@ -96,23 +134,28 @@ const AdsApproval = () => {
         ))}
       </div>
 
-      <div className="mt-4 flex space-x-2">
-        <button 
-          disabled={currentPage === 1} 
-          onClick={() => setCurrentPage(prev => prev - 1)} 
-          className="px-4 py-2 bg-gray-300 rounded disabled:opacity-50"
-        >
-          Prev
-        </button>
-        <span>Page {currentPage} of {totalPages}</span>
-        <button 
-          disabled={currentPage === totalPages} 
-          onClick={() => setCurrentPage(prev => prev + 1)} 
-          className="px-4 py-2 bg-gray-300 rounded disabled:opacity-50"
-        >
-          Next
-        </button>
-      </div>
+      {/* Pagination */}
+      {totalPages > 1 && (
+        <div className="mt-4 flex justify-center items-center space-x-2">
+          <button
+            disabled={currentPage === 1}
+            onClick={() => setCurrentPage((prev) => prev - 1)}
+            className="px-4 py-2 bg-gray-300 rounded disabled:opacity-50"
+          >
+            Prev
+          </button>
+          <span className="text-gray-700 font-medium">
+            Page {currentPage} of {totalPages}
+          </span>
+          <button
+            disabled={currentPage === totalPages}
+            onClick={() => setCurrentPage((prev) => prev + 1)}
+            className="px-4 py-2 bg-gray-300 rounded disabled:opacity-50"
+          >
+            Next
+          </button>
+        </div>
+      )}
     </div>
   );
 };

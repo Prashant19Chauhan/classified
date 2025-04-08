@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { addUserRole } from "../api/adminService";
+import { toast } from "react-toastify";
 
 function AddUser() {
   const [userData, setUserData] = useState({
@@ -11,6 +12,8 @@ function AddUser() {
     role: "user",
     permissions: [],
   });
+
+  const [loading, setLoading] = useState(false);
 
   const roles = ["admin", "moderator", "user"];
   const permissionsList = [
@@ -39,7 +42,30 @@ function AddUser() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await addUserRole(userData);
+    // basic validation
+    if (!userData.name || !userData.email || !userData.phoneNumber || !userData.password) {
+      toast.error("Please fill in all required fields.");
+      return;
+    }
+
+    setLoading(true);
+    try {
+      await addUserRole(userData);
+      toast.success("User added successfully!");
+      setUserData({
+        name: "",
+        username: "",
+        email: "",
+        phoneNumber: "",
+        password: "",
+        role: "user",
+        permissions: [],
+      });
+    } catch (error) {
+      toast.error(error?.response?.data?.message || "Failed to add user.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -127,9 +153,12 @@ function AddUser() {
           <div className="text-center">
             <button
               type="submit"
-              className="bg-blue-600 text-white px-6 py-3 rounded-full hover:bg-blue-700 transition duration-300"
+              disabled={loading}
+              className={`bg-blue-600 text-white px-6 py-3 rounded-full transition duration-300 ${
+                loading ? "opacity-60 cursor-not-allowed" : "hover:bg-blue-700"
+              }`}
             >
-              Add User
+              {loading ? "Adding..." : "Add User"}
             </button>
           </div>
         </form>

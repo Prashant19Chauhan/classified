@@ -10,9 +10,15 @@ import {
   MdMenu,
   MdClose,
 } from "react-icons/md";
+import { motion } from "framer-motion";
+
+const SIDEBAR_WIDTH_OPEN = 256; // 64 * 4 (Tailwind's w-64)
+const SIDEBAR_WIDTH_COLLAPSED = 80; // 20 * 4 (Tailwind's w-20)
+const HEADER_HEIGHT = 64; // 16 * 4 (Tailwind's h-16)
 
 const DashboardLayout = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
   const dispatch = useDispatch();
   const location = useLocation();
 
@@ -20,8 +26,15 @@ const DashboardLayout = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
 
-  const logoutHandler = () => {
-    dispatch(logout());
+  const logoutHandler = async () => {
+    setIsLoggingOut(true);
+    try {
+      await dispatch(logout());
+    } catch (error) {
+      // handle error
+    } finally {
+      setIsLoggingOut(false);
+    }
   };
 
   const navItems = [
@@ -31,27 +44,32 @@ const DashboardLayout = () => {
   ];
 
   return (
-    <div className="flex min-h-screen bg-gray-900 text-white">
+    <div className="flex bg-gray-900 text-white">
       {/* Sidebar */}
-      <aside
-        className={`bg-gray-800 h-screen p-4 space-y-6 transition-all duration-300 ${
+      <motion.aside
+        initial={{ x: -100, opacity: 0 }}
+        animate={{ x: 0, opacity: 1 }}
+        transition={{ duration: 0.3 }}
+        className={`fixed top-16 left-0 bottom-0 z-20 bg-gray-800 p-4 space-y-6 transition-all duration-300 ${
           isSidebarOpen ? "w-64" : "w-20"
         }`}
+        style={{ height: `calc(100vh - ${HEADER_HEIGHT}px)` }}
       >
-        {/* Toggle Button */}
+        {/* Toggle Sidebar Button */}
         <button
           onClick={toggleSidebar}
+          aria-label={isSidebarOpen ? "Close sidebar" : "Open sidebar"}
           className="text-white mb-4 focus:outline-none"
         >
           {isSidebarOpen ? <MdClose size={26} /> : <MdMenu size={26} />}
         </button>
 
-        {/* Title */}
+        {/* Sidebar Title */}
         {isSidebarOpen && (
           <h2 className="text-2xl font-bold text-blue-400">Dashboard</h2>
         )}
 
-        {/* Navigation */}
+        {/* Navigation Links */}
         <nav className="space-y-3">
           {navItems.map(({ label, to, icon }) => {
             const isActive = location.pathname === to;
@@ -62,6 +80,7 @@ const DashboardLayout = () => {
                 className={`flex items-center gap-4 py-2 px-4 rounded transition duration-200 ${
                   isActive ? "bg-blue-600" : "bg-gray-700 hover:bg-gray-600"
                 }`}
+                aria-current={isActive ? "page" : undefined}
               >
                 {icon}
                 {isSidebarOpen && <span>{label}</span>}
@@ -70,18 +89,32 @@ const DashboardLayout = () => {
           })}
         </nav>
 
-        {/* Logout */}
+        {/* Logout Button */}
         <button
           onClick={logoutHandler}
-          className="flex items-center gap-4 w-full py-2 px-4 bg-red-600 hover:bg-red-500 rounded transition"
+          className={`flex items-center gap-4 w-full py-2 px-4 rounded transition ${
+            isLoggingOut
+              ? "bg-red-400 cursor-not-allowed"
+              : "bg-red-600 hover:bg-red-500"
+          }`}
+          disabled={isLoggingOut}
+          aria-disabled={isLoggingOut}
         >
           <MdLogout size={24} />
-          {isSidebarOpen && <span>Logout</span>}
+          {isSidebarOpen && (
+            <span>{isLoggingOut ? "Logging out..." : "Logout"}</span>
+          )}
         </button>
-      </aside>
+      </motion.aside>
 
       {/* Main Content */}
-      <main className="flex-1 p-6 overflow-auto">
+      <main
+        className={`flex-1 mt-16 transition-all duration-300 overflow-y-auto p-6`}
+        style={{
+          marginLeft: isSidebarOpen ? SIDEBAR_WIDTH_OPEN : SIDEBAR_WIDTH_COLLAPSED,
+          height: `calc(100vh - ${HEADER_HEIGHT}px)`,
+        }}
+      >
         <Outlet />
       </main>
     </div>

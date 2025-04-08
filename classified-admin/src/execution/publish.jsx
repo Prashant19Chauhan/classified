@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { publishClassified } from "../api/adminService";
 import { useParams } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 function Publish() {
   const { duration } = useParams();
@@ -12,14 +14,23 @@ function Publish() {
     duration: duration,
   });
 
+  const [loading, setLoading] = useState(false);
+
   const changeHandler = (e) => {
-    setFormData({...formData, [e.target.name]: e.target.value})
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const formHandler = async (e) => {
     e.preventDefault();
-    const data = await publishClassified(formData);
-    console.log(data);
+    setLoading(true);
+    try {
+      const data = await publishClassified(formData);
+      toast.success("Classified published successfully!");
+    } catch (error) {
+      toast.error("Failed to publish classified");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -84,10 +95,14 @@ function Publish() {
         <button
           type="submit"
           className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition duration-200"
+          disabled={loading}
         >
-          Submit
+          {loading ? "Submitting..." : "Submit"}
         </button>
       </form>
+
+      {/* Toast container */}
+      <ToastContainer position="top-center" autoClose={3000} />
     </div>
   );
 }
