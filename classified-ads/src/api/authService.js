@@ -10,7 +10,7 @@ export const register = async (formData) => {
         "Content-Type": "application/json",
       },
     });
-    return response;
+    return response.data;
   } catch (error) {
     throw new Error(
       error.response?.data?.message || "Something went wrong during registration"

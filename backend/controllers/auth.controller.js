@@ -9,6 +9,7 @@ const isValidPassword = (password) =>
 const isValidPhoneNumber = (number) => /^[6-9]\d{9}$/.test(number);  // Indian mobile numbers
 
 export const register = async (req, res, next) => {
+  console.log(req.body)
   try {
     const { name, email, username, password, phoneNumber, confirmPassword } = req.body;
 
