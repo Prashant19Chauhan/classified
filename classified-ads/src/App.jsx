@@ -20,6 +20,12 @@ const DashboardLayout = lazy(() => import("./components/DashboardLayout"));
 const DashboardHome = lazy(() => import("./pages/dashboard/DashboardHome"));
 const CreateAds = lazy(() => import("./pages/dashboard/CreateAds"));
 const Settings = lazy(() => import("./pages/dashboard/Settings"));
+const About = lazy(() => import("./pages/About"))
+const Tariff = lazy(() => import("./pages/Tariff"))
+const Booking = lazy(() => import("./pages/Booking"))
+const Client = lazy(() => import("./pages/Clients"))
+const Contact = lazy(() => import("./pages/Contact"))
+
 
 
 function App() {
@@ -39,6 +45,10 @@ function App() {
           <Route path="/signup" element={currentUser ? <Navigate to="/" /> : <Signup />} />
           <Route path="/logout" element={currentUser ? <Logout /> : <Navigate to="/login" />} />
           <Route path="/epaper" element={<Epaper />} />
+          <Route path="/tariff" element={<Tariff/>} />
+          <Route path="/booking" element={<Booking />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/about" element={<About />} />
 
           {/* Protected */}
           <Route element={<PrivateRoute />}>
