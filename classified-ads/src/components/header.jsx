@@ -165,6 +165,15 @@ function Header() {
               </li>
               <li
                 onClick={() => {
+                  navigate("/epaper");
+                  setSidebarOpen(false);
+                }}
+                className="cursor-pointer hover:text-blue-600 transition duration-200 transform hover:scale-105"
+              >
+                Epaper
+              </li>
+              <li
+                onClick={() => {
                   navigate("/booking");
                   setSidebarOpen(false);
                 }}

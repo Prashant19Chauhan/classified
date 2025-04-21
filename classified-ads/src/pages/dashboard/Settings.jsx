@@ -3,21 +3,31 @@ import { useState } from "react";
 const Settings = () => {
   const [userData, setUserData] = useState({
     name: "John Doe",
-    email: "john@example.com",
+    username: "john123",
     password: "",
     confirmPassword: "",
-    theme: "dark",
+    aadhaarFront: null, // For storing front photo file
+    aadhaarBack: null,  // For storing back photo file
   });
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setUserData((prev) => ({ ...prev, [name]: value }));
+    const { name, value, files } = e.target;
+
+    if (files) {
+      // Handling file inputs for Aadhaar card
+      setUserData((prev) => ({
+        ...prev,
+        [name]: files[0], // Only store the first file
+      }));
+    } else {
+      setUserData((prev) => ({ ...prev, [name]: value }));
+    }
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("Saved Data:", userData);
-    // Save logic here
+    // You can send the data to your server or API here
   };
 
   return (
@@ -40,10 +50,10 @@ const Settings = () => {
               />
             </div>
             <div>
-              <label className="block text-sm mb-1">Email</label>
+              <label className="block text-sm mb-1">Username</label>
               <input
-                type="email"
-                name="email"
+                type="text"
+                name="username"
                 value={userData.email}
                 onChange={handleChange}
                 className="w-full p-2 bg-gray-700 rounded border border-gray-600 focus:outline-none"
@@ -79,20 +89,26 @@ const Settings = () => {
           </div>
         </section>
 
-        {/* Preferences Section */}
+        {/* Aadhaar Card Upload Section */}
         <section className="bg-[#2c2c2e] p-6 rounded-lg shadow-md">
-          <h2 className="text-xl font-semibold mb-4">🎨 Preferences</h2>
+          <h2 className="text-xl font-semibold mb-4">🆔 Aadhaar Card Upload</h2>
           <div>
-            <label className="block text-sm mb-2">Theme</label>
-            <select
-              name="theme"
-              value={userData.theme}
+            <label className="block text-sm mb-1">Aadhaar Front</label>
+            <input
+              type="file"
+              name="aadhaarFront"
               onChange={handleChange}
               className="w-full p-2 bg-gray-700 rounded border border-gray-600 focus:outline-none"
-            >
-              <option value="dark">Dark</option>
-              <option value="light">Light</option>
-            </select>
+            />
+          </div>
+          <div className="mt-4">
+            <label className="block text-sm mb-1">Aadhaar Back</label>
+            <input
+              type="file"
+              name="aadhaarBack"
+              onChange={handleChange}
+              className="w-full p-2 bg-gray-700 rounded border border-gray-600 focus:outline-none"
+            />
           </div>
         </section>
 

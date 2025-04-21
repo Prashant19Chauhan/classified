@@ -81,6 +81,32 @@ const Classified = () => {
     });
   };
 
+  const handleDownloadImage = async () => {
+    try {
+      const imagePath = ads.find(ad => ad.position == 1)?.imageUrl;
+      if (!imagePath) return alert("Image not found!");
+  
+      const imageUrl = `${API_URL}/uploads/${imagePath}`;
+      const response = await fetch(imageUrl);
+      const blob = await response.blob();
+      const url = URL.createObjectURL(blob);
+  
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "front-page-image.jpg";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+  
+      console.log("Image downloaded successfully.");
+    } catch (error) {
+      console.error("Error downloading image:", error);
+      alert("Failed to download image.");
+    }
+  };
+  
+
   return (
     <div className="relative min-h-screen bg-gray-100 pb-24">
       {/* Header */}
@@ -136,6 +162,13 @@ const Classified = () => {
           className="px-6 py-3 bg-green-600 hover:bg-green-700 text-white text-lg rounded-xl shadow-md transition-all disabled:opacity-50"
         >
           Download PDF
+        </button>
+        <button
+          onClick={handleDownloadImage}
+          disabled={!ads.length}
+          className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white text-lg rounded-xl shadow-md transition-all disabled:opacity-50"
+        >
+          Download Front Image
         </button>
       </div>
     </div>

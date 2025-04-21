@@ -25,6 +25,7 @@ const Tariff = lazy(() => import("./pages/Tariff"))
 const Booking = lazy(() => import("./pages/Booking"))
 const Client = lazy(() => import("./pages/Clients"))
 const Contact = lazy(() => import("./pages/Contact"))
+const SinglePaper = lazy(() => import("./pages/SinglePaper"))
 
 
 
@@ -45,6 +46,7 @@ function App() {
           <Route path="/signup" element={currentUser ? <Navigate to="/" /> : <Signup />} />
           <Route path="/logout" element={currentUser ? <Logout /> : <Navigate to="/login" />} />
           <Route path="/epaper" element={<Epaper />} />
+          <Route path="/epaper/:key" element={<SinglePaper/>}/>
           <Route path="/tariff" element={<Tariff/>} />
           <Route path="/booking" element={<Booking />} />
           <Route path="/contact" element={<Contact />} />

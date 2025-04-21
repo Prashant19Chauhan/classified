@@ -20,6 +20,14 @@ function Publish() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  const fileHandler = (e) => {
+    setFormData({...formData, file: e.target.files[0]});
+  }
+
+  const imageHandler = (e) => {
+    setFormData({...formData, image: e.target.files[0]});
+  }
+
   const formHandler = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -69,7 +77,7 @@ function Publish() {
           <input
             type="file"
             name="file"
-            onChange={changeHandler}
+            onChange={fileHandler}
             accept="application/pdf"
             className="w-full border border-gray-300 rounded-md p-2"
             required
@@ -84,7 +92,7 @@ function Publish() {
           <input
             type="file"
             name="image"
-            onChange={changeHandler}
+            onChange={imageHandler}
             accept="image/*"
             className="w-full border border-gray-300 rounded-md p-2"
             required

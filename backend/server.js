@@ -14,6 +14,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use('/uploads', express.static(path.resolve('uploads')));
+app.use('/classifieds', express.static(path.resolve('classifieds')));
 
 mongoose
   .connect(process.env.MONGO_URI)
