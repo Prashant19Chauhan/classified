@@ -71,6 +71,20 @@ const DashboardHome = () => {
     }
   };
 
+  function formatDateRange(duration) {
+    if (!duration) return "N/A";
+  
+    // Split the duration string into start and end date
+    const [startDate, endDate] = duration.split("|");
+  
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+  
+    const options = { year: 'numeric', month: 'short', day: 'numeric' };
+  
+    return `${start.toLocaleDateString(undefined, options)} - ${end.toLocaleDateString(undefined, options)}`;
+  }
+
   if (loading) return <p className="text-center text-gray-400">Loading ads...</p>;
 
   return (
@@ -113,7 +127,10 @@ const DashboardHome = () => {
               <img src={selectedAd.imageUrl} alt="Ad Visual" className="w-full h-56 object-cover rounded-md mb-4" />
               <p className="mb-2"><span className="font-semibold">Description:</span> {selectedAd.description || "No description"}</p>
               <p className="mb-2"><span className="font-semibold">Position:</span> {selectedAd.position}</p>
-              <p className="mb-2"><span className="font-semibold">Duration:</span> {selectedAd.duration} days</p>
+              <p className="mb-2">
+                <span className="font-semibold">Duration:</span>{" "}
+                {formatDateRange(selectedAd.duration)}
+              </p>
               <p className="mb-2"><span className="font-semibold">Status:</span> <span className="capitalize text-green-400">{selectedAd.status}</span></p>
             </motion.div>
           </motion.div>

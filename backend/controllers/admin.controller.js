@@ -117,11 +117,13 @@ export const adsApproval = async (req, res, next) => {
 };
 
 export const publishClassified = async (req, res, next) => {
-  console.log(req.body)
+      
   try {
-    const { layout, file, image, duration } = req.body;
-
-    const newData = new Classified({ layout, file, image, duration });
+    const layout = req.body.layout;
+    const duration = req.body.duration;
+    const file = req.files.file[0];
+    const image = req.files.image[0];
+    const newData = new Classified({ layout, file:file.filename, image:image.filename, duration });
     await newData.save();
 
     await adsShedule.updateMany(

@@ -42,10 +42,16 @@ export const adsApproval = async (data) => {
 };
 
 export const publishClassified = async (formData) => {
+    const data = new FormData();
+    data.append("layout", formData.layout);
+    data.append("duration", formData.duration);
+    data.append("file", formData.file);
+    data.append("image", formData.image);
+
     try {
-        const response = await axios.post(`${API_URL}/publish`, formData, {
+        const response = await axios.post(`${API_URL}/publish`, data, {
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "multipart/form-data",
             },
         });
         return response.data;
@@ -96,3 +102,46 @@ export const fetchpages = async (duration) => {
         throw error;
     }
 };
+
+
+
+export const getUsers = async () => {
+    const res = await fetch(`${API_URL}/users`);
+    return res.json();
+  };
+  
+  export const getUserAds = async (userId) => {
+    const res = await fetch(`${API_URL}/admin/user-ads/${userId}`);
+    return res.json();
+  };
+  
+  export const getClassifieds = async () => {
+    const res = await fetch(`${API_URL}/admin/classifieds`);
+    return res.json();
+  };
+  
+  export const deleteClassified = async (id) => {
+    await fetch(`${API_URL}/admin/classifieds/${id}`, { method: 'DELETE' });
+  };
+  
+  export const getOffers = async () => {
+    const res = await fetch(`${API_URL}/admin/offers`);
+    return res.json();
+  };
+  
+  export const createOffer = async (offerData) => {
+    await fetch(`${API_URL}/admin/offers`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(offerData),
+    });
+  };
+  
+  export const deleteOffer = async (id) => {
+    await fetch(`${API_URL}/admin/offers/${id}`, { method: 'DELETE' });
+  };
+  
+
+  export const fetchCreatorDetails = async() => {
+    console.log("hey")
+  }
