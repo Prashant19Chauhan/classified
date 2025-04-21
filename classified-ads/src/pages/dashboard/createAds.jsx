@@ -28,7 +28,8 @@ function CreateAds() {
     description: "",
     duration: "",
     position: "",
-    image: "",
+    image: null,
+    isfile: false,
   });
 
   const isValidUrl = (url) => {
@@ -66,24 +67,27 @@ function CreateAds() {
     e.preventDefault();
     const file = e.dataTransfer.files[0];
     if (!file) return;
-
+    
     const previewUrl = URL.createObjectURL(file);
     setImagePreview(previewUrl);
     setFormData((prev) => ({
       ...prev,
-      image: previewUrl,
+      image: file,
+      isfile: true,
     }));
   };
 
   const handleFileSelect = (e) => {
     const file = e.target.files[0];
+    console.log(file)
     if (!file) return;
 
     const previewUrl = URL.createObjectURL(file);
     setImagePreview(previewUrl);
     setFormData((prev) => ({
       ...prev,
-      image: previewUrl,
+      image: file,
+      isfile: true,
     }));
   };
 
@@ -98,11 +102,6 @@ function CreateAds() {
       !formData.image
     ) {
       toast.error("Please fill all fields.");
-      return;
-    }
-
-    if (!isValidUrl(formData.image)) {
-      toast.error("Image URL is invalid.");
       return;
     }
 
@@ -265,21 +264,6 @@ function CreateAds() {
                 className="mt-4 max-h-48 mx-auto rounded-xl shadow-md"
               />
             )}
-          </div>
-
-          <div>
-            <label className="block mb-2 text-gray-300 font-semibold">Or paste image URL</label>
-            <input
-              type="text"
-              name="image"
-              value={formData.image}
-              onChange={(e) => {
-                setFormData({ ...formData, image: e.target.value });
-                setImagePreview(e.target.value);
-              }}
-              placeholder="https://example.com/image.jpg"
-              className="w-full p-4 bg-[#2c2c2e] rounded-xl border border-gray-600"
-            />
           </div>
 
           <motion.button

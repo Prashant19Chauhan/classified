@@ -10,14 +10,40 @@ const config = {
 
 // ✅ Create Ad
 export const createAds = async (formData) => {
+  const { isfile, image, ...rest } = formData;
+  let data;
+  let config;
+
+  if (isfile && image) {
+    // Case: file upload with other fields
+    data = new FormData();
+    Object.entries(rest).forEach(([key, value]) => data.append(key, value));
+    data.append("image", image);
+
+    config = {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    };
+  } else {
+    // Case: only JSON data
+    data = JSON.stringify(rest);
+
+    config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+  }
+
   try {
-    const response = await axios.post(`${API_URL}/createAds`, formData, config);
-    const { status, data } = response;
+    const response = await axios.post(`${API_URL}/createAds`, data, config);
+    const { status, data: resData } = response;
 
     if (status === 200 || status === 201) {
       return {
         success: true,
-        data,
+        data: resData,
         message: "Ad created successfully",
       };
     }
@@ -30,7 +56,8 @@ export const createAds = async (formData) => {
     return {
       success: false,
       message:
-        error?.response?.data?.message || "Something went wrong while creating the ad.",
+        error?.response?.data?.message ||
+        "Something went wrong while creating the ad.",
     };
   }
 };

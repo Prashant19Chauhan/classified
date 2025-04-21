@@ -5,12 +5,14 @@ import adsSchedule from '../models/sheduleAds.js';
 import setting from '../models/setting.js';
 import { errorHandler } from '../utils/error.js';
 
+
 // ✅ Create New Ad
 export const createAds = async (req, res, next) => {
   try {
-    const { creator, title, description, position, duration, image } = req.body;
-
-    if (!creator || !title || !position || !duration || !image) {
+    const { creator, title, description, position, duration} = req.body;
+    const file = req.file;
+    const fileName = file.filename;
+    if (!creator || !title || !position || !duration || !file) {
       return next(errorHandler(400, "All required fields must be provided"));
     }
 
@@ -24,7 +26,7 @@ export const createAds = async (req, res, next) => {
       creator,
       title,
       description,
-      imageUrl: image,
+      imageUrl: fileName,
       position,
       duration,
     });

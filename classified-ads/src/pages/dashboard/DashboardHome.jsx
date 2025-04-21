@@ -4,6 +4,8 @@ import { fetchAdsByUser } from '../../api/adsService';
 import { FaEye, FaTimesCircle } from 'react-icons/fa';
 import { motion, AnimatePresence } from 'framer-motion';
 
+const API_URL = `${import.meta.env.VITE_API_URL || "http://localhost:8800"}`;
+
 const DashboardHome = () => {
   const currentUser = useSelector((state) => state.user);
   const user = currentUser?.currentUser?.user;
@@ -51,9 +53,15 @@ const DashboardHome = () => {
   }, [userId]);
 
   const handleAction = (action, adItem) => {
+    console.log(adItem)
+    const fullAd = {
+      ...adItem,
+      imageUrl: `${API_URL}/uploads/${adItem.imageUrl}`,
+    };
     switch (action) {
       case "Show":
-        setSelectedAd(adItem);
+        setSelectedAd(fullAd);
+        console.log(fullAd)
         break;
       case "Refund":
         console.log("Refund requested for:", adItem._id);

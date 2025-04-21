@@ -75,6 +75,7 @@ export const login = async (req, res, next) => {
       // Verify the Firebase ID token
       const decodedToken = await admin.auth().verifyIdToken(idToken);
       const { uid } = decodedToken;
+
   
       // Find user in MongoDB
       const findUser = await User.findOne({ firebaseUID: uid });

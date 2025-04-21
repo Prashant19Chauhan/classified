@@ -3,6 +3,8 @@ import { adsList, fetchDuration, fetchpages } from '../api/adminService';
 import { useNavigate } from 'react-router-dom';
 import html2pdf from 'html2pdf.js';
 
+const API_URL = `${import.meta.env.VITE_API_URL || "http://localhost:8800"}`;
+
 const Classified = () => {
   const navigate = useNavigate();
   const [durationOptions, setDurationOptions] = useState([]);
@@ -54,7 +56,8 @@ const Classified = () => {
   };
 
   const renderAd = (position) => {
-    const imageUrl = ads.find(ad => ad.position == position)?.imageUrl || "/assets/airport taxi service.avif";
+    const imgUrl = ads.find(ad => ad.position == position)?.imageUrl;
+    const imageUrl = imgUrl? `${API_URL}/uploads/${imgUrl}` : "/assets/airport taxi service.avif";
     console.log(imageUrl)
     return (
       <img src={imageUrl} alt={`Ad ${position}`} className="object-cover w-full h-full" />

@@ -5,13 +5,15 @@ import cors from "cors";
 import { initializeFirebase } from './firebase/firebaseAdmin.js';
 import authRoute from "./routes/auth.route.js";
 import adsRoute from "./routes/ads.route.js";
-import adminRoute from "./routes/admin.rote.js"
+import adminRoute from "./routes/admin.rote.js";
+import path from 'path';
 
 dotenv.config();
 
 const app = express();
 app.use(cors());
 app.use(express.json());
+app.use('/uploads', express.static(path.resolve('uploads')));
 
 mongoose
   .connect(process.env.MONGO_URI)
