@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { FaCheckCircle, FaTimesCircle, FaEye, FaTrash, FaUserAlt } from 'react-icons/fa';
+import { FaCheckCircle, FaTimesCircle, FaEye, FaTrash, FaUserAlt, FaLink } from 'react-icons/fa';
 import { adsList, adsApproval, fetchCreatorDetails } from '../api/adminService';
 import toast, { Toaster } from 'react-hot-toast';
 
-// Modal Component
+// Reason Modal Component
 const ReasonModal = ({ isOpen, onClose, onSubmit }) => {
   const [reason, setReason] = useState('');
 
@@ -38,6 +38,76 @@ const ReasonModal = ({ isOpen, onClose, onSubmit }) => {
   );
 };
 
+// Creator Modal Component
+const CreatorModal = ({ isOpen, onClose, creator }) => {
+  if (!isOpen || !creator) return null;
+
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
+      <div className="bg-white p-6 rounded shadow-md w-full max-w-md">
+        <h2 className="text-xl font-bold mb-4">Creator Details</h2>
+        <p><span className="font-semibold">Name:</span> {creator.name || "N/A"}</p>
+        <p><span className="font-semibold">Email:</span> {creator.email || "N/A"}</p>
+        <p><span className="font-semibold">Phone:</span> {creator.phoneNumber || "N/A"}</p>
+        <div className="mt-4 flex justify-end">
+          <button onClick={onClose} className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400">Close</button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const LinkModel = ({ isOpen, onClose, links }) => {
+  if (!isOpen || !links) return null;
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm px-4">
+      <div className="bg-white text-gray-900 rounded-2xl shadow-2xl w-full max-w-md p-6 transition-all transform scale-100">
+        {/* Modal Header */}
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-2xl font-semibold">Ad Links</h2>
+          <button
+            onClick={onClose}
+            className="text-gray-500 hover:text-gray-700 text-xl font-bold focus:outline-none"
+          >
+            &times;
+          </button>
+        </div>
+
+        {/* Modal Content */}
+        <div className="space-y-4">
+          {links.map((data, index) => (
+            <div
+              key={index}
+              className="border border-gray-200 rounded-md p-3 hover:bg-gray-50"
+            >
+              <p className="text-sm font-medium mb-1">{data.label}</p>
+              <a
+                href={data.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-600 text-sm underline break-words"
+              >
+                {data.url}
+              </a>
+            </div>
+          ))}
+        </div>
+
+        {/* Modal Footer */}
+        <div className="mt-6 text-right">
+          <button
+            onClick={onClose}
+            className="bg-gray-800 text-white px-4 py-2 rounded-md hover:bg-gray-900 transition"
+          >
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const AdsApproval = () => {
   const [ads, setAds] = useState([]);
   const [activeTab, setActiveTab] = useState('pending');
@@ -45,8 +115,11 @@ const AdsApproval = () => {
   const [loading, setLoading] = useState(false);
   const [selectedAd, setSelectedAd] = useState(null);
   const [creatorDetails, setCreatorDetails] = useState(null);
+  const [showCreatorModal, setShowCreatorModal] = useState(false);
   const [showReasonModal, setShowReasonModal] = useState(false);
   const [reasonAdId, setReasonAdId] = useState(null);
+  const [links, setLinks] = useState([]);
+  const [showLinkModel, setShowLinkModel] = useState(false);
 
   const adsPerPage = 10;
 
@@ -95,6 +168,7 @@ const AdsApproval = () => {
     try {
       const result = await fetchCreatorDetails(creatorId);
       setCreatorDetails(result);
+      setShowCreatorModal(true);
     } catch (err) {
       toast.error("Failed to fetch creator details.");
     }
@@ -108,6 +182,11 @@ const AdsApproval = () => {
     const days = Math.ceil((end - start) / (1000 * 60 * 60 * 24));
     return `${start.toLocaleDateString('en-US', options)} to ${end.toLocaleDateString('en-US', options)} (${days} day${days !== 1 ? 's' : ''})`;
   };
+
+  const fetchLinks = (ad) => {
+    setLinks(ad.links)
+    setShowLinkModel(true)
+  }
 
   return (
     <div className="p-4">
@@ -168,9 +247,13 @@ const AdsApproval = () => {
                 className="p-2 bg-blue-500 text-white rounded hover:bg-blue-600">
                 <FaEye size={18} />
               </button>
-              <button onClick={() => fetchCreator(ad.creatorId)}
+              <button onClick={() => fetchCreator(ad.creator)}
                 className="p-2 bg-purple-500 text-white rounded hover:bg-purple-600">
                 <FaUserAlt size={18} />
+              </button>
+              <button onClick={() => fetchLinks(ad)}
+                className="p-2 bg-blue-500 text-white rounded hover:bg-blue-600">
+                <FaLink size={18} />
               </button>
             </div>
           </div>
@@ -196,7 +279,7 @@ const AdsApproval = () => {
         </div>
       )}
 
-      {/* View Modal */}
+      {/* View Ad Modal */}
       {selectedAd && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
           <div className="bg-white p-6 rounded-lg w-full max-w-lg relative shadow-xl">
@@ -233,6 +316,20 @@ const AdsApproval = () => {
         isOpen={showReasonModal}
         onClose={() => setShowReasonModal(false)}
         onSubmit={(reason) => handleStatusUpdate(reasonAdId, 'notApproved', reason)}
+      />
+
+      {/* Creator Modal */}
+      <CreatorModal
+        isOpen={showCreatorModal}
+        onClose={() => setShowCreatorModal(false)}
+        creator={creatorDetails}
+      />
+
+      {/* Link Model */}
+      <LinkModel
+        isOpen={showLinkModel}
+        onClose={() => setShowLinkModel(false)}
+        links = {links}
       />
     </div>
   );

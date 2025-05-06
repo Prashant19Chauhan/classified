@@ -57,28 +57,86 @@ const Classified = () => {
 
   const renderAd = (position) => {
     const imgUrl = ads.find(ad => ad.position == position)?.imageUrl;
+    const links = ads.find(ad => ad.position == position)?.links;
     const imageUrl = imgUrl? `${API_URL}/uploads/${imgUrl}` : "/assets/airport taxi service.avif";
     console.log(imageUrl)
     return (
-      <img src={imageUrl} alt={`Ad ${position}`} className="object-cover w-full h-full" />
+      <div>
+        <img
+          src={imageUrl}
+          alt={`Ad ${position}`}
+          className="object-cover w-full h-full"
+        />
+
+      {links?.length > 0 && (
+        <div className="bg-white dark:bg-black text-gray-900 dark:text-white px-6 py-4 text-sm sm:text-base">
+          <p className="font-medium">
+            {links.map((link, index) => (
+              <span key={index}>
+                <a
+                  href={link.url || "#"}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-600"
+                >
+                  {link.label}
+                </a>
+                {index !== links.length - 1 && ", "}
+              </span>
+            ))}
+          </p>
+        </div>
+      )}
+    </div>
     );
   };
 
-  const handleDownloadPDF = () => {
+  const handleDownloadPDF = async () => {
     const element = pdfRef.current;
-    element.classList.remove('gap-4');
-
-    const opt = {
-      margin: 0,
-      filename: 'classified_ads.pdf',
-      image: { type: 'jpeg', quality: 1 },
-      html2canvas: { scale: 2, useCORS: true },
-      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-    };
-
-    html2pdf().from(element).set(opt).save().then(() => {
+    if (!element) return;
+  
+    try {
+      setLoading(true);
+      setError('');
+  
+      // Temporarily remove gap if causing layout breaks
+      element.classList.remove('gap-4');
+  
+      // Wait for all images in the component to fully load
+      const images = element.querySelectorAll('img');
+      await Promise.all(
+        Array.from(images).map(img => {
+          if (img.complete) return Promise.resolve();
+          return new Promise(resolve => {
+            img.onload = img.onerror = resolve;
+          });
+        })
+      );
+  
+      // Options for html2pdf
+      const opt = {
+        margin: 0,
+        filename: 'classified_ads.pdf',
+        image: { type: 'jpeg', quality: 1 },
+        html2canvas: {
+          scale: 2,
+          useCORS: true,
+          allowTaint: true, // optional: useful if you’re okay with tainted canvas
+          logging: false
+        },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+      };
+  
+      await html2pdf().from(element).set(opt).save();
+  
+      // Restore layout
       element.classList.add('gap-4');
-    });
+    } catch (err) {
+      console.error('Failed to generate PDF:', err);
+      setError('Error generating PDF. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleDownloadImage = async () => {

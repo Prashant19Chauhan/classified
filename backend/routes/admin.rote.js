@@ -1,5 +1,5 @@
 import express from 'express'
-import { login, addUser, adsList, adsApproval, publishClassified, classifiedSettings, getDuration, getPages } from '../controllers/admin.controller.js';
+import { login, addUser, adsList, adsApproval, publishClassified, classifiedSettings, getDuration, getPages, getCreatorInfo} from '../controllers/admin.controller.js';
 import multer from 'multer'
 
 const router = express();
@@ -13,5 +13,6 @@ router.post('/publish', upload.fields([{ name: "file", maxCount: 1 },{ name: "im
 router.post('/settings', classifiedSettings);
 router.get("/getDuration", getDuration);
 router.post("/getPages", getPages)
+router.post("/creatorInfo", getCreatorInfo)
 
 export default router;

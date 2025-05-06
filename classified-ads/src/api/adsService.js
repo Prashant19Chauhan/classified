@@ -10,7 +10,7 @@ const config = {
 
 // ✅ Create Ad
 export const createAds = async (formData) => {
-  const { isfile, image, ...rest } = formData;
+  const { isfile, image, links, ...rest } = formData;
   let data;
   let config;
 
@@ -19,6 +19,7 @@ export const createAds = async (formData) => {
     data = new FormData();
     Object.entries(rest).forEach(([key, value]) => data.append(key, value));
     data.append("image", image);
+    data.append("links", JSON.stringify(links))
 
     config = {
       headers: {

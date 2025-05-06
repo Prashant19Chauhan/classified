@@ -8,7 +8,7 @@ function AdClassifiedBooking() {
     email: "",
     adType: "",
     size: "",
-    rate: "",
+    file: "",
     message: "",
   });
 
@@ -82,10 +82,9 @@ function AdClassifiedBooking() {
             className="border p-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400"
           />
           <input
-            type="text"
-            name="rate"
-            placeholder="Rate (₹)"
-            value={formData.rate}
+            type="file"
+            name="file"
+            value={formData.file}
             onChange={handleChange}
             required
             className="border p-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400"

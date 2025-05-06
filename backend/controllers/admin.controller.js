@@ -1,4 +1,5 @@
 import AdminUser from '../models/admin.js'
+import user from '../models/user.js'
 import ads from '../models/Ad.js'
 import adsShedule from '../models/sheduleAds.js'
 import Classified from '../models/classified.js'
@@ -8,6 +9,7 @@ import bcryptjs from "bcryptjs";
 import jwt from "jsonwebtoken";
 import setting from '../models/setting.js'
 import { errorHandler } from '../utils/error.js'
+import adsHistory from '../models/adsHistory.js'
 
 // Utility functions
 const isValidEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
@@ -91,7 +93,11 @@ export const addUser = async (req, res, next) => {
 
 export const adsList = async (req, res, next) => {
   try {
-    const allAds = await adsShedule.find();
+    const sheduleAds = await adsShedule.find();
+    const historyAds = await adsHistory.find();
+    
+    const allAds = [...sheduleAds, ...historyAds];
+
     res.status(200).json({ allAds, message: "success" });
   } catch (error) {
     return next(errorHandler(500, "Failed to fetch ads list"));
@@ -100,8 +106,8 @@ export const adsList = async (req, res, next) => {
 
 export const adsApproval = async (req, res, next) => {
   try {
-    const { id, status } = req.body;
-    await adsShedule.updateOne({ _id: id }, { $set: { status } });
+    const { id, status, reason } = req.body;
+    await adsShedule.updateOne({ _id: id }, { $set: { status, reason } });
 
     const adsToMoveToHistory = await adsShedule.find({ status: "notApproved" });
 
@@ -215,3 +221,10 @@ export const getPages = async (req, res, next) => {
     return next(errorHandler( 500, "Failed to fetch pages"));
   }
 };
+
+export const getCreatorInfo = async(req, res) => {
+  const creator = req.body;
+  const creatorData = await user.findOne({firebaseUID:creator.creatorId})
+  res.status(201).json({creatorData});
+}
+

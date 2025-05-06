@@ -22,6 +22,16 @@ export const createAds = async (req, res, next) => {
       return next(errorHandler(409, "An ad already exists for this position and duration"));
     }
 
+    let links = [];
+
+    if (req.body.links) {
+      try {
+        links = JSON.parse(req.body.links); // ✅ parse back to array
+      } catch (err) {
+        return res.status(400).json({ success: false, message: "Invalid links format" });
+      }
+    }
+
     const newAd = new adsSchedule({
       creator,
       title,
@@ -29,6 +39,7 @@ export const createAds = async (req, res, next) => {
       imageUrl: fileName,
       position,
       duration,
+      links,
     });
 
     await newAd.save();

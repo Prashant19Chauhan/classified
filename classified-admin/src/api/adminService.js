@@ -62,6 +62,7 @@ export const publishClassified = async (formData) => {
 };
 
 export const setClassified = async (durations, numberOfPages, pageLayouts) => {
+    console.log(pageLayouts, numberOfPages)
     try {
         const response = await axios.post(`${API_URL}/settings`, {
             durations,
@@ -142,6 +143,12 @@ export const getUsers = async () => {
   };
   
 
-  export const fetchCreatorDetails = async() => {
-    console.log("hey")
+  export const fetchCreatorDetails = async(creatorId) => {
+    const response = await axios.post(`${API_URL}/creatorInfo`, {creatorId}, {
+        headers: {
+            "Content-Type": "application/json",
+        },
+    })
+    const data = response.data;
+    return data.creatorData;
   }

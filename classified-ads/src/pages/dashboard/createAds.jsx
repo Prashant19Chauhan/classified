@@ -10,6 +10,7 @@ import { ToastContainer, toast } from "react-toastify";
 import { motion } from "framer-motion";
 import Confetti from "react-confetti";
 import "react-toastify/dist/ReactToastify.css";
+import AdPreviewCanvas from "./AdPreviewCanvas";
 
 function CreateAds() {
   const { currentUser } = useSelector((state) => state.user);
@@ -30,6 +31,7 @@ function CreateAds() {
     position: "",
     image: null,
     isfile: false,
+    links: [{ label: "", url: "" }],
   });
 
   const isValidUrl = (url) => {
@@ -47,6 +49,21 @@ function CreateAds() {
 
   const changeHandler = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleLinkChange = (index, field, value) => {
+    const newLinks = [...formData.links];
+    newLinks[index][field] = value;
+    setFormData({ ...formData, links: newLinks });
+  };
+
+  const addNewLink = () => {
+    setFormData({ ...formData, links: [...formData.links, { label: "", url: "" }] });
+  };
+
+  const removeLink = (index) => {
+    const updatedLinks = formData.links.filter((_, i) => i !== index);
+    setFormData({ ...formData, links: updatedLinks });
   };
 
   const durationHandler = async (e) => {
@@ -67,7 +84,7 @@ function CreateAds() {
     e.preventDefault();
     const file = e.dataTransfer.files[0];
     if (!file) return;
-    
+
     const previewUrl = URL.createObjectURL(file);
     setImagePreview(previewUrl);
     setFormData((prev) => ({
@@ -79,7 +96,6 @@ function CreateAds() {
 
   const handleFileSelect = (e) => {
     const file = e.target.files[0];
-    console.log(file)
     if (!file) return;
 
     const previewUrl = URL.createObjectURL(file);
@@ -94,23 +110,23 @@ function CreateAds() {
   const formHandler = async (e) => {
     e.preventDefault();
 
-    if (
-      !formData.title ||
-      !formData.description ||
-      !formData.duration ||
-      !formData.position ||
-      !formData.image
-    ) {
+    const allFieldsFilled = formData.title && formData.description && formData.duration && formData.position && formData.image;
+    const validLinks = formData.links.every(link => link.label.trim() && isValidUrl(link.url));
+
+    if (!allFieldsFilled) {
       toast.error("Please fill all fields.");
+      return;
+    }
+
+    if (!validLinks) {
+      toast.error("Please provide valid labels and URLs.");
       return;
     }
 
     setLoading(true);
     try {
       const response = await createAds(formData);
-      if (!response.success) {
-        throw new Error(response.message || "Ad creation failed.");
-      }
+      if (!response.success) throw new Error(response.message || "Ad creation failed.");
 
       toast.success("Advertisement created successfully!");
       setShowConfetti(true);
@@ -121,7 +137,9 @@ function CreateAds() {
         description: "",
         duration: "",
         position: "",
-        image: "",
+        image: null,
+        isfile: false,
+        links: [{ label: "", url: "" }],
       });
       setImagePreview(null);
       setPages(0);
@@ -139,9 +157,7 @@ function CreateAds() {
     const getDurations = async () => {
       try {
         const data = await fetchDuration();
-        if (Array.isArray(data)) {
-          setDuration(data);
-        }
+        if (Array.isArray(data)) setDuration(data);
       } catch (err) {
         toast.error("Error fetching durations");
       }
@@ -164,16 +180,10 @@ function CreateAds() {
         onSubmit={formHandler}
         className="max-w-3xl mx-auto bg-[#1c1c1e] text-white p-6 sm:p-8 mt-10 rounded-2xl shadow-2xl space-y-8 border border-gray-700"
       >
-        <h1 className="text-3xl sm:text-4xl font-bold text-center">
-          🚀 Create Advertisement
-        </h1>
+        <h1 className="text-3xl sm:text-4xl font-bold text-center">🚀 Create Advertisement</h1>
 
         <div className="grid grid-cols-1 gap-6">
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.1 }}
-          >
+          <div>
             <label className="block mb-2 text-gray-300 font-semibold">Title</label>
             <input
               type="text"
@@ -181,24 +191,20 @@ function CreateAds() {
               value={formData.title}
               onChange={changeHandler}
               placeholder="Enter title"
-              className="w-full p-4 bg-[#2c2c2e] rounded-xl border border-gray-600 focus:ring focus:ring-blue-500"
+              className="w-full p-4 bg-[#2c2c2e] rounded-xl border border-gray-600"
             />
-          </motion.div>
+          </div>
 
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.2 }}
-          >
+          <div>
             <label className="block mb-2 text-gray-300 font-semibold">Description</label>
             <textarea
               name="description"
               value={formData.description}
               onChange={changeHandler}
               placeholder="Enter description"
-              className="w-full p-4 bg-[#2c2c2e] h-32 resize-none rounded-xl border border-gray-600 focus:ring focus:ring-blue-500"
+              className="w-full p-4 bg-[#2c2c2e] h-32 resize-none rounded-xl border border-gray-600"
             />
-          </motion.div>
+          </div>
 
           <div>
             <label className="block mb-2 text-gray-300 font-semibold">Duration</label>
@@ -222,16 +228,13 @@ function CreateAds() {
             <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-3">
               {[...Array(pages)].map((_, index) => {
                 const page = index + 1;
-                const isUnavailable =
-                  notAvailablePage.includes(page) || notAvailablePage.includes(page.toString());
+                const isUnavailable = notAvailablePage.includes(page) || notAvailablePage.includes(page.toString());
                 const isSelected = formData.position == page;
 
                 return (
-                  <motion.div
+                  <div
                     key={page}
                     id={page}
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
                     onClick={isUnavailable ? undefined : clickHandler}
                     className={`text-center py-2 px-3 rounded-xl font-medium transition-all ${
                       isUnavailable
@@ -242,7 +245,7 @@ function CreateAds() {
                     }`}
                   >
                     Page {page}
-                  </motion.div>
+                  </div>
                 );
               })}
             </div>
@@ -266,6 +269,47 @@ function CreateAds() {
             )}
           </div>
 
+          {/* Link Inputs */}
+          <div className="space-y-4">
+            <label className="block text-gray-300 font-semibold">Insert Links</label>
+            {formData.links.map((link, index) => (
+              <div key={index} className="grid grid-cols-1 sm:grid-cols-2 gap-4 items-center">
+                <input
+                  type="text"
+                  placeholder="Label"
+                  value={link.label}
+                  onChange={(e) => handleLinkChange(index, "label", e.target.value)}
+                  className="p-3 rounded-xl bg-[#2c2c2e] border border-gray-600"
+                />
+                <div className="flex gap-2 items-center">
+                  <input
+                    type="url"
+                    placeholder="https://example.com"
+                    value={link.url}
+                    onChange={(e) => handleLinkChange(index, "url", e.target.value)}
+                    className="p-3 rounded-xl bg-[#2c2c2e] border border-gray-600 w-full"
+                  />
+                  {formData.links.length > 1 && (
+                    <button
+                      type="button"
+                      onClick={() => removeLink(index)}
+                      className="bg-red-500 hover:bg-red-600 text-white px-3 py-2 rounded-xl"
+                    >
+                      ✕
+                    </button>
+                  )}
+                </div>
+              </div>
+            ))}
+            <button
+              type="button"
+              onClick={addNewLink}
+              className="bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded-xl text-white font-semibold"
+            >
+              ➕ Add Another Link
+            </button>
+          </div>
+
           <motion.button
             type="submit"
             disabled={loading}
@@ -280,6 +324,13 @@ function CreateAds() {
             {loading ? "Submitting..." : "Submit Advertisement"}
           </motion.button>
         </div>
+
+        {/* Preview Canvas */}
+        <AdPreviewCanvas
+          imagePreview={imagePreview}
+          links={formData.links}
+        />
+
       </motion.form>
     </>
   );
