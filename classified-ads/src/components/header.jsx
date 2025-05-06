@@ -5,6 +5,9 @@ import { useDispatch } from "react-redux";
 import { logout } from "../redux/userSlice";
 import { motion, AnimatePresence } from "framer-motion";
 
+// Add this to your index.html or load via Tailwind plugin
+// <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap" rel="stylesheet" />
+
 function Header() {
   const isLogin = true; // Replace with real auth logic
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -41,26 +44,26 @@ function Header() {
 
   return (
     <>
-      <header className="flex justify-between items-center px-6 py-4 bg-white shadow-lg rounded-md relative z-50">
-        {/* Left - Hamburger + Logo */}
-        <div className="flex items-center gap-3">
+      <header className="flex justify-between items-center px-6 py-6 bg-white shadow-lg relative z-50">
+        {/* Left - Sidebar Toggle */}
+        <div className="flex-1">
           <button
             onClick={toggleSidebar}
             className="text-gray-800 hover:text-blue-600 p-2 rounded-full focus:outline-none transition duration-300 transform hover:scale-105"
           >
             <FaBars size={22} />
           </button>
+        </div>
 
-          <div
-            className="text-2xl font-bold text-blue-700 cursor-pointer"
-            onClick={() => navigate("/")}
-          >
+        {/* Center - Logo */}
+        <div className="flex-1 text-center cursor-pointer" onClick={() => navigate("/")}>
+          <h1 className="text-2xl font-serif tracking-wide italic md:text-4xl text-blue-800" style={{ fontFamily: "'Playfair Display', serif" }}>
             <span className="text-gray-800">Ujala</span> Classified
-          </div>
+          </h1>
         </div>
 
         {/* Right - Profile/Login */}
-        <div className="relative" ref={dropdownRef}>
+        <div className="flex-1 flex justify-end relative" ref={dropdownRef}>
           {isLogin ? (
             <div
               className="flex items-center gap-2 cursor-pointer"
@@ -136,60 +139,12 @@ function Header() {
               </button>
             </div>
             <ul className="p-4 space-y-6 text-gray-800 font-medium">
-              <li
-                onClick={() => {
-                  navigate("/");
-                  setSidebarOpen(false);
-                }}
-                className="cursor-pointer hover:text-blue-600 transition duration-200 transform hover:scale-105"
-              >
-                Home
-              </li>
-              <li
-                onClick={() => {
-                  navigate("/about");
-                  setSidebarOpen(false);
-                }}
-                className="cursor-pointer hover:text-blue-600 transition duration-200 transform hover:scale-105"
-              >
-                About
-              </li>
-              <li
-                onClick={() => {
-                  navigate("/tariff");
-                  setSidebarOpen(false);
-                }}
-                className="cursor-pointer hover:text-blue-600 transition duration-200 transform hover:scale-105"
-              >
-                Tariff
-              </li>
-              <li
-                onClick={() => {
-                  navigate("/epaper");
-                  setSidebarOpen(false);
-                }}
-                className="cursor-pointer hover:text-blue-600 transition duration-200 transform hover:scale-105"
-              >
-                Epaper
-              </li>
-              <li
-                onClick={() => {
-                  navigate("/booking");
-                  setSidebarOpen(false);
-                }}
-                className="cursor-pointer hover:text-blue-600 transition duration-200 transform hover:scale-105"
-              >
-                Booking
-              </li>
-              <li
-                onClick={() => {
-                  navigate("/contact");
-                  setSidebarOpen(false);
-                }}
-                className="cursor-pointer hover:text-blue-600 transition duration-200 transform hover:scale-105"
-              >
-                Contact Us
-              </li>
+              <li onClick={() => { navigate("/"); setSidebarOpen(false); }} className="cursor-pointer hover:text-blue-600 transition duration-200 transform hover:scale-105">Home</li>
+              <li onClick={() => { navigate("/about"); setSidebarOpen(false); }} className="cursor-pointer hover:text-blue-600 transition duration-200 transform hover:scale-105">About</li>
+              <li onClick={() => { navigate("/tariff"); setSidebarOpen(false); }} className="cursor-pointer hover:text-blue-600 transition duration-200 transform hover:scale-105">Tariff</li>
+              <li onClick={() => { navigate("/epaper"); setSidebarOpen(false); }} className="cursor-pointer hover:text-blue-600 transition duration-200 transform hover:scale-105">Epaper</li>
+              <li onClick={() => { navigate("/booking"); setSidebarOpen(false); }} className="cursor-pointer hover:text-blue-600 transition duration-200 transform hover:scale-105">Booking</li>
+              <li onClick={() => { navigate("/contact"); setSidebarOpen(false); }} className="cursor-pointer hover:text-blue-600 transition duration-200 transform hover:scale-105">Contact Us</li>
             </ul>
           </motion.div>
         )}
