@@ -7,12 +7,19 @@ const DurationSchema = new mongoose.Schema({
 
   const PageLayoutSchema = new mongoose.Schema({
     pageNumber: { type: Number, required: true },
-    layout: {
+    layoutType: {
       type: String,
       enum: ['full', 'half', 'quarter', 'custom'],
       required: true,
     },
+    positions: [
+      {
+        pageNumber: { type: Number, required: true },
+        layout: { type: Number, required: true },
+      },
+    ],
   });
+  
   
   const ClassifiedSettingSchema = new mongoose.Schema({
     durations: [DurationSchema],

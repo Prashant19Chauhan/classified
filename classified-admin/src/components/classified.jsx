@@ -55,41 +55,64 @@ const Classified = () => {
     }
   };
 
-  const renderAd = (position) => {
-    const imgUrl = ads.find(ad => ad.position == position)?.imageUrl;
-    const links = ads.find(ad => ad.position == position)?.links;
-    const imageUrl = imgUrl? `${API_URL}/uploads/${imgUrl}` : "/assets/airport taxi service.avif";
-    console.log(imageUrl)
+  const renderAd = (pageNumber) => {
+    const matchedAds = ads.filter(ad => ad.pageNumber == pageNumber);
+    const adCount = matchedAds.length;
+  
+    // Dynamic grid columns and rows
+    const gridCols =
+      adCount === 1 ? "grid-cols-1" :
+      adCount === 2 ? "grid-cols-1" :
+      adCount === 4 ? "grid-cols-2" : "grid-cols-1";
+  
+    // Make parent container take full height (assumes parent gives a height)
     return (
-      <div>
-        <img
-          src={imageUrl}
-          alt={`Ad ${position}`}
-          className="object-cover w-full h-full"
-        />
+      <div className={`grid ${gridCols} gap-0 w-full h-full`}>
+        {matchedAds.map((ad, index) => {
+          const imageUrl = ad.imageUrl
+            ? `${API_URL}/uploads/${ad.imageUrl}`
+            : "/assets/airport taxi service.avif";
 
-      {links?.length > 0 && (
-        <div className="bg-white dark:bg-black text-gray-900 dark:text-white px-6 py-4 text-sm sm:text-base">
-          <p className="font-medium">
-            {links.map((link, index) => (
-              <span key={index}>
-                <a
-                  href={link.url || "#"}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-blue-600"
-                >
-                  {link.label}
-                </a>
-                {index !== links.length - 1 && ", "}
-              </span>
-            ))}
-          </p>
-        </div>
-      )}
-    </div>
+          const links = ad.links;
+          console.log(links)
+  
+          return (
+            <div key={index} className="w-full h-full">
+              <div className='w-full h-full'>
+              <img
+                src={imageUrl}
+                alt={`Ad ${pageNumber} - Layout ${ad.layout}`}
+                className="w-[full] h-[90%] object-cover"
+              />
+              {links?.length > 0 && (
+              <div className="bg-white dark:bg-black text-gray-900 dark:text-white px-6 py-4 text-sm sm:text-base w-full h=[4%]">
+                <p className="font-medium">
+                  {links.map((link, index) => (
+                    <span key={index}>
+                    <a
+                      href={link.url || "#"}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-600"
+                    >
+                      {link.label}
+                    </a>
+                      {index !== links.length - 1 && ", "}
+                    </span>
+                  ))}
+                </p>
+              </div>
+            )}
+              </div>
+            </div>
+          );
+        })}
+      </div>
     );
   };
+  
+  
+  
 
   const handleDownloadPDF = async () => {
     const element = pdfRef.current;
@@ -141,7 +164,7 @@ const Classified = () => {
 
   const handleDownloadImage = async () => {
     try {
-      const imagePath = ads.find(ad => ad.position == 1)?.imageUrl;
+      const imagePath = ads.find(ad => ad.position == 'pageNumber:1_layout:1')?.imageUrl;
       if (!imagePath) return alert("Image not found!");
   
       const imageUrl = `${API_URL}/uploads/${imagePath}`;

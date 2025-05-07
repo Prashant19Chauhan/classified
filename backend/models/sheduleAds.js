@@ -7,6 +7,8 @@ const AdSchema = new mongoose.Schema({
   imageUrl: { type: String, required: true },
   reason: { type: String },
   position: { type: String, required: true},
+  pageNumber: {type: String},
+  layout: {type: String},
   duration: { type: String, required: true },
   links: [
     {

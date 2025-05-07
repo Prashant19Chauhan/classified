@@ -32,12 +32,23 @@ export const createAds = async (req, res, next) => {
       }
     }
 
+    const parts = position.split("_");
+
+    // Extract values
+    const pageNumber = parts[0].split(":")[1]; // "3"
+    const layout = parts[1].split(":")[1];     // "2"
+
+    console.log(pageNumber); // "3"
+    console.log(layout);     // "2"
+
     const newAd = new adsSchedule({
       creator,
       title,
       description,
       imageUrl: fileName,
       position,
+      pageNumber,
+      layout,
       duration,
       links,
     });
@@ -118,8 +129,7 @@ export const getPages = async (req, res, next) => {
     if (!getData) {
       return next(errorHandler(404, "No matching duration found"));
     }
-
-    const pages = getData.numberOfPages;
+    const pages = getData.pageLayouts;
     return res.status(200).json(pages);
 
   } catch (error) {

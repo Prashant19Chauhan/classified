@@ -13,7 +13,7 @@ function SinglePaper() {
   const [numPages, setNumPages] = useState(null);
   const [pageNumber, setPageNumber] = useState(1);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-  const pdfUrl = `http://localhost:8800/classifieds/${key}`;
+  const pdfUrl = `${import.meta.env.VITE_API_URL || "http://localhost:8800"}/classifieds/${key}`;
 
   const onDocumentLoadSuccess = ({ numPages }) => {
     setNumPages(numPages);

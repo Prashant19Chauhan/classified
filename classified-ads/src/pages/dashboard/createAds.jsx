@@ -18,6 +18,7 @@ function CreateAds() {
 
   const [duration, setDuration] = useState([]);
   const [pages, setPages] = useState(0);
+  const [positions, setPositions] = useState({});
   const [notAvailablePage, setNotAvailablePage] = useState([]);
   const [loading, setLoading] = useState(false);
   const [imagePreview, setImagePreview] = useState(null);
@@ -72,8 +73,11 @@ function CreateAds() {
 
     try {
       const pageData = await fetchpages(selectedDuration);
+      const allPositions = pageData.flatMap(item => item.positions);
       const available = await fetchAvailablePages(selectedDuration);
-      setPages(pageData || 0);
+      setPages(pageData.length || 0);
+      setPositions(allPositions);
+      console.log(available)
       setNotAvailablePage(available || []);
     } catch (err) {
       toast.error("Error fetching page data");
@@ -228,23 +232,36 @@ function CreateAds() {
             <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-3">
               {[...Array(pages)].map((_, index) => {
                 const page = index + 1;
-                const isUnavailable = notAvailablePage.includes(page) || notAvailablePage.includes(page.toString());
-                const isSelected = formData.position == page;
 
                 return (
                   <div
                     key={page}
                     id={page}
-                    onClick={isUnavailable ? undefined : clickHandler}
-                    className={`text-center py-2 px-3 rounded-xl font-medium transition-all ${
-                      isUnavailable
-                        ? "bg-gray-700 text-gray-400"
-                        : isSelected
-                        ? "bg-green-600 text-white scale-105 shadow-md"
-                        : "bg-blue-600 hover:bg-blue-700 cursor-pointer text-white"
-                    }`}
+                    className="bg-gray-700 flex flex-col items-center"
                   >
-                    Page {page}
+                    <span>Page: {page}</span>
+                    {positions.map((data, index) => {
+                      const uniqueValue = `pageNumber:${data.pageNumber}_layout:${data.layout}`;
+                      const isUnavailable = notAvailablePage.includes(uniqueValue);
+                      const isSelected = formData.position === uniqueValue;
+
+                      if(page==data.pageNumber){
+                        return(
+                          <div
+                            key={index}
+                            id={uniqueValue}
+                            onClick={isUnavailable ? undefined : clickHandler}
+                            className={`text-center py-2 px-3 font-medium transition-all ${
+                              isUnavailable
+                                ? "bg-gray-700 text-gray-400"
+                                : isSelected
+                                ? "bg-green-600 text-white scale-105 shadow-md"
+                                : "bg-blue-600 hover:bg-blue-700 cursor-pointer text-white"
+                            }`}
+                          >position: {data.layout}</div>
+                        )
+                      }
+                    })}
                   </div>
                 );
               })}

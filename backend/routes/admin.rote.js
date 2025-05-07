@@ -1,5 +1,5 @@
 import express from 'express'
-import { login, addUser, adsList, adsApproval, publishClassified, classifiedSettings, getDuration, getPages, getCreatorInfo} from '../controllers/admin.controller.js';
+import { userInfo, classifiedsInfo, userAdsInfo, login, addUser, adsList, adsApproval, publishClassified, classifiedSettings, getDuration, getPages, getCreatorInfo} from '../controllers/admin.controller.js';
 import multer from 'multer'
 
 const router = express();
@@ -14,5 +14,9 @@ router.post('/settings', classifiedSettings);
 router.get("/getDuration", getDuration);
 router.post("/getPages", getPages)
 router.post("/creatorInfo", getCreatorInfo)
+router.get('/users', userInfo)
+router.get('/classifieds', classifiedsInfo)
+router.get('/user-ads/:userId', userAdsInfo)
+
 
 export default router;

@@ -178,11 +178,46 @@ export const transfertoHistory = async (req, res, next) => {
 export const classifiedSettings = async (req, res, next) => {
   try {
     const { durations, numberOfPages, pageLayouts } = req.body;
-    const pageLayoutsArray = Object.entries(pageLayouts).map(([pageNumber, layout]) => ({
-      pageNumber: parseInt(pageNumber),
-      layout,
-    }));
 
+    // Build pageLayoutsArray with layoutType and positions
+    const pageLayoutsArray = Object.entries(pageLayouts).map(([pageNumber, layoutType]) => {
+      const pageNum = parseInt(pageNumber);
+      let positions = [];
+
+      // Generate positions based on layoutType
+      switch (layoutType) {
+        case "full":
+          positions = [{ pageNumber: pageNum, layout: 1 }];
+          break;
+        case "half":
+          positions = [
+            { pageNumber: pageNum, layout: 1 },
+            { pageNumber: pageNum, layout: 2 },
+          ];
+          break;
+        case "quarter":
+          positions = [
+            { pageNumber: pageNum, layout: 1 },
+            { pageNumber: pageNum, layout: 2 },
+            { pageNumber: pageNum, layout: 3 },
+            { pageNumber: pageNum, layout: 4 },
+          ];
+          break;
+        case "custom":
+          // Leave positions empty or handle as needed
+          break;
+        default:
+          throw new Error(`Invalid layout type: ${layoutType}`);
+      }
+
+      return {
+        pageNumber: pageNum,
+        layoutType,
+        positions,
+      };
+    });
+
+    // Create and save the document
     const settingData = new setClassified({
       durations,
       numberOfPages,
@@ -190,11 +225,17 @@ export const classifiedSettings = async (req, res, next) => {
     });
 
     await settingData.save();
-    res.status(201).json({ message: "Classified setting saved successfully", setting: settingData });
+
+    res.status(201).json({
+      message: "Classified setting saved successfully",
+      setting: settingData,
+    });
   } catch (error) {
-    return next(errorHandler( 500, "Failed to save classified settings"));
+    return next(errorHandler(500, "Failed to save classified settings"));
   }
 };
+
+
 
 export const getDuration = async (req, res, next) => {
   try {
@@ -228,3 +269,23 @@ export const getCreatorInfo = async(req, res) => {
   res.status(201).json({creatorData});
 }
 
+
+export const userInfo = async(req, res) => {
+  const userData = await user.find();
+  res.status(201).json({userData})
+}
+
+export const classifiedsInfo = async(req, res) => {
+  const classifiedsData = await Classified.find();
+  res.status(201).json({classifiedsData})
+}
+
+export const userAdsInfo = async(req, res) => {
+  console.log(req.params.userId)
+  const userAds = await ads.find({creator: req.params.userId})
+  const userAds1 = await adsShedule.find({creator: req.params.userId})
+  const userAds2 = await adsHistory.find({creator: req.params.userId})
+  
+  const mergedArray = [...userAds, ...userAds1, ...userAds2];
+  res.status(200).json({mergedArray});
+}

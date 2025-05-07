@@ -106,19 +106,23 @@ export const fetchpages = async (duration) => {
 
 
 
-export const getUsers = async () => {
-    const res = await fetch(`${API_URL}/users`);
-    return res.json();
+export const userInfoApi = async () => {
+    const res = await axios.get(`${API_URL}/users`);
+    const data = res.data;
+    return data.userData;
   };
   
   export const getUserAds = async (userId) => {
-    const res = await fetch(`${API_URL}/admin/user-ads/${userId}`);
-    return res.json();
+    const res = await axios.get(`${API_URL}/user-ads/${userId}`);
+    const data = res.data;
+    console.log(data.mergedArray)
+    return data.mergedArray;
   };
   
-  export const getClassifieds = async () => {
-    const res = await fetch(`${API_URL}/admin/classifieds`);
-    return res.json();
+  export const classifiedInfoApi = async () => {
+    const res = await axios.get(`${API_URL}/classifieds`);
+    const data = res.data;
+    return data.classifiedsData;
   };
   
   export const deleteClassified = async (id) => {
