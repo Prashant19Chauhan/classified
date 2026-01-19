@@ -15,7 +15,7 @@ const Signup = lazy(() => import("./pages/Signup"));
 const Logout = lazy(() => import("./components/logout"));
 const Epaper = lazy(() => import("./pages/epaper"));
 const Payment = lazy(() => import("./pages/payment"));
-const Confirmation = lazy(() => import("./components/Confirmation"));
+const Confirmation = lazy(() => import("./components/confirmation"));
 const DashboardLayout = lazy(() => import("./components/DashboardLayout"));
 const DashboardHome = lazy(() => import("./pages/dashboard/DashboardHome"));
 const CreateAds = lazy(() => import("./pages/dashboard/CreateAds"));
