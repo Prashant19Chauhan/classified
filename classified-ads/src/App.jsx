@@ -12,7 +12,7 @@ const NotFound = lazy(() => import("./components/NotFound")); // custom 404 page
 const Home = lazy(() => import("./pages/Home"));
 const Login = lazy(() => import("./pages/Login"));
 const Signup = lazy(() => import("./pages/Signup"));
-const Logout = lazy(() => import("./components/Logout"));
+const Logout = lazy(() => import("./components/logout"));
 const Epaper = lazy(() => import("./pages/Epaper"));
 const Payment = lazy(() => import("./pages/payment"));
 const Confirmation = lazy(() => import("./components/Confirmation"));
