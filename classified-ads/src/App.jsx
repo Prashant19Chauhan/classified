@@ -18,7 +18,7 @@ const Payment = lazy(() => import("./pages/payment"));
 const Confirmation = lazy(() => import("./components/confirmation"));
 const DashboardLayout = lazy(() => import("./components/DashboardLayout"));
 const DashboardHome = lazy(() => import("./pages/dashboard/DashboardHome"));
-const CreateAds = lazy(() => import("./pages/dashboard/CreateAds"));
+const CreateAds = lazy(() => import("./pages/dashboard/createAds"));
 const Settings = lazy(() => import("./pages/dashboard/Settings"));
 const About = lazy(() => import("./pages/About"))
 const Tariff = lazy(() => import("./pages/Tariff"))
