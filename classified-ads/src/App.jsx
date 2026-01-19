@@ -13,7 +13,7 @@ const Home = lazy(() => import("./pages/Home"));
 const Login = lazy(() => import("./pages/Login"));
 const Signup = lazy(() => import("./pages/Signup"));
 const Logout = lazy(() => import("./components/logout"));
-const Epaper = lazy(() => import("./pages/Epaper"));
+const Epaper = lazy(() => import("./pages/epaper"));
 const Payment = lazy(() => import("./pages/payment"));
 const Confirmation = lazy(() => import("./components/Confirmation"));
 const DashboardLayout = lazy(() => import("./components/DashboardLayout"));
