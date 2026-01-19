@@ -28,6 +28,7 @@ export const login = async (req, res, next) => {
       return next(errorHandler(403, "User not authorized as admin"));
 
     const isMatch = await bcryptjs.compare(password, user.password);
+    console.log()
     if (!isMatch) return next(errorHandler(400, "Invalid credentials!"));
 
     const token = jwt.sign(

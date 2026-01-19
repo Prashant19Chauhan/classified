@@ -1,14 +1,13 @@
 {
-    "type": "service_account",
-    "project_id": "urban-classified",
-    "private_key_id": "755b5ed20e602ae618df264ef713923cca7c4d25",
-    "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDocYF/bM4URmZD\nwyhAAjGq1L7rVPfhNDzqcunXkUBkmt2/4/OOUnLnUX4gHYhdS31ZBMw8keejvhWJ\nFMePlAV4TQFOJSY5Eh4VY6brDcdS/lgx9JJif2EazTOCfmDwItoWPV4TSiAbHGyt\n+S21L39VbkOYWt8nksTrX07jTujoik6tD3PmDVy4czbKHwNHoJBXRwWEvRJKxnof\nzMpziwFlZuowHdAX8j96JklOlelTEZvlvQTwYqwaRCuVISl64sQONhCYBSFQARQq\nE8jd1VuLD0Fwa8ZFu+gG12F+P1/YtADP4ygP7hH/zy/tCfTKr9az6q1ByN0yITIx\ntjiu6mNJAgMBAAECggEASr9tiF+h6a0156aTg/nwpOHjP2REjjwxNqebgUHpdjDD\nDJkuUl87Kh3vtD4rAu1qsryzPOsilWpkHH/9KLPOCoCg4dNadlHYMMKqA76bkZnP\nHMlsZZZW0LqaTOV9INvkS/CSFxvoNS+v10ZhJ3nNtdhOjmjyiBRPlO1CPiC7D0QF\nt7phODFLX4KL2//xc8stZDgEvuWNItGutWxObWLYk9q9LGzY/WB7PsY8n7V3781R\nOotLzT/q5k/O4nVNI6SpgaXlPLbmLQgFdZK+/UScaNG5u50g52I/WXsFa4wGT0Xi\npHynoYtzUmt4GP2CnB3rQADDe+qAs/5UZX3iN+wHzQKBgQD/hod4k5ujY8IjekFc\ngPQBOnFOSmvOO7wIxK9rJ9j6h5gDdUu+lwg1SQ0czg5Q5f6ThOZ79fc1csB2szRn\nMOM+9nx8AJk+Ik1FGw4uIcncjhnX4ryM31+XhqjbZdPFbuGSoq8OGreDXjm+hTBU\nnPl/VLE81ACzYOTyK+KglchMgwKBgQDo4AEEGPIfvs9H4MI9/H18nrTh8CGsUy0R\nWBDNRF4N7XMnaTpxfLe+SBAIzWtuPGXZ6tW0ci5vRz17WcQL+VgFlLOUx0eCGYxG\ntmTqdKxmfo3pkUs5GiLAq5dIE9wZYiFpbCuiKSpNZyJtkuE/LSjDMMYSgusBfr55\nbp25rNOfQwKBgHZzOmFeq4s2N0yS47Gp5XKcUOHmBct4TVYTNu4Jbr/UE1enDBGx\nmZB56KYtrt05gKWJuf5EqvAP3cAommYrd2w8fsBM1rzC0eby/8PKzfR7uuckqBr1\ngS6Qsb3imiSvncmHuHZlVCSFjWcP/rN6gP3RmMeFzz1X8UmBpnCiflNZAoGBAIkE\nQ5TFmLBU9GC2PZN7G9pXBtZpE2bxCXNK/ZfIwg4vx7FImLptRy8N92E2fB9AKi0t\nns+s3uVaZTJOfqsM6l1eQMso9Un2/jIc3wOT4lvr2lOyyS+v0QLL8xbVmIrW0hHV\nM1cWIW2pYPhXk3A4geNWrzP1E5CtoiSQkPzOUzVBAoGAOnkJqGGjDHLvWbDM84UD\njIz5gqmeN5p9h+k8uktIJYsLDFJJU/b1vpL4z9H2UVADVGQ4wySSwxrAIwMfg3zd\nK8t/RsgnXTFejC2Vw6DFJlCo/XCUFFHKM2/fK1UI2IWoj8i6ItDkl6/SvuWUX755\nQ4rU9+AS0th2Z5kiMbIbvS8=\n-----END PRIVATE KEY-----\n",
-    "client_email": "firebase-adminsdk-fbsvc@urban-classified.iam.gserviceaccount.com",
-    "client_id": "114028797894895560184",
-    "auth_uri": "https://accounts.google.com/o/oauth2/auth",
-    "token_uri": "https://oauth2.googleapis.com/token",
-    "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-    "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-fbsvc%40urban-classified.iam.gserviceaccount.com",
-    "universe_domain": "googleapis.com"
-  }
-  
+  "type": "service_account",
+  "project_id": "urban-classified",
+  "private_key_id": "8882b601373d22781c679e3ceb90de302234d215",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCiYwwzluNPHfkX\nWPG588cKzZEYXrD+wvzPmwn78UeJr8o88rxuKSV7OGPbsC6nfxCajNHZPFfU6mLl\nA08ZyPvFVTzwhyQTtinDNnpphhPrKI4sAKoXR5z6FnIGi2ZjnweJuLHLq7uZkXqL\nPz/qVQbHqIz7lnzt1zHUdIz8a1BYbPZI/dflMbrpm/Z9P5tWFm7WaLjExmAqDxYN\nmVAl6u1FvUF/erVnlFEKvOzXw/UHPWQQ+vVzyE2e6plr5Ofn6xik/jM3hw9+sAbP\nDnLQtT0l9sPFkFaFzUpFMRx580+07wqDdkKMQR3NhxHBOixbxDE82OPhxBMm7ux1\nLcMuYrMBAgMBAAECggEAAjcTrYh7ZVLlWPovofe/WVhgiFKSW4dRZ4uX4UXzUd+C\nBL7S7zXEex/TzOVkXYiQM2uEWVBHanIgEzuuUo25UYHOKQHO7i3n9+/AT7wyfVy6\nQ8Nmjpa9f3Pa7lfsd6NtuOU6F6sqDfg8EbY1Kv8p7oNQGQZ+gcgTt/A3FCJqoCom\nxGUx9gv7wM7+Zj5Jdvg9Gc0WmjyfElJYuTow+fhgzbp3EECkV0+RMF0PYCX3UCr0\niJ6JkLBMcyquhyC7jR46r3fALjXnHWGCaWtNwOo1oJ+xZeFgojl/1iRqlDFgEcU+\nOXqxM5Xg5OBkkKN4tZsZg1sM8Qo90qAO3BzXWn5BeQKBgQDelhzFZCi6mvXqSmXi\nxgHA+Raqba/mNKHBdpUrf8KMf0RzPsLphEBJh8JPa0LLmPloa4CHVJ+55FNmg98H\naUGhVGnmbxx+xyhZQnjyAG+7mT2hLwyVYlPbefcqCF9aHwFQfPmMRgRiC9TetgXA\njKX8/VZLWr5MhzoTuS+shVU2pwKBgQC6w3+cK7e77aWzpcSdSSZps3VywdVix8by\nNNJCYjC/Pc3piYk8uYwC8yiBloArrueTiRvhdRqBjisLca80JxnF3MSCDkM94Siq\n/g+6BYs4k8pPYZqD+Q5RsDyapSJ8/TZ2PTRbImuO3okf2V5qWunEcJn93uFywqz5\n5wf6NzImFwKBgQCPhdeTZ9vjRxweME62BNsIpRR6XDO5imJqrp3M6Jp3oXBvpx5j\nGEWjpAgk0ZLGWSMos3iyylwbryAf0BQ1YSdScW2/ihGjpaNcusHluWZSXqMglYfV\nowtTT7eRwMhLAgcE8TCvxE37MonV+SSIXaiCEpBcEmz2R5OpOBWHdonVrQKBgACc\nHtCNu/3bGs1pXyj8UinKMjn7tAyshlPIJF+fHnWhaAi5MD+Ig5KG5Lz3lteNrKfo\nrLShw0JlCnLxHhdXgVgKDoI2NbYABDf6uGZtGjVHFkQIF48Swx81Kh1/KIur7/+W\n15Lsm9lNlLkL5qkGPvkrPPV9QtMzG4l9XaNNhtZlAoGAIWoL7n/myxw9NTE2TUjI\nuMmIqLgU8sLzn+H8ZOFjaR4mRiwpllBjfRZWyl5xtRFH8mAZnZPARqQpkYla7i7d\nXm8Tuk/2TyeBYsQlHezEvqBao0/fb3kkMm3aDwnk9b0yQtL51+yqyDIzr8MiYB3I\n3aPcFbgFseq0xhhGFcmJvwo=\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-fbsvc@urban-classified.iam.gserviceaccount.com",
+  "client_id": "114028797894895560184",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-fbsvc%40urban-classified.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}

@@ -121,6 +121,8 @@ const Classified = () => {
     try {
       setLoading(true);
       setError('');
+
+      
   
       // Temporarily remove gap if causing layout breaks
       element.classList.remove('gap-4');
@@ -213,14 +215,14 @@ const Classified = () => {
       {/* Content */}
       <div ref={pdfRef} className="grid grid-cols-1 gap-4 mt-4">
         {loading ? (
-          <div className="text-center py-20 text-xl text-gray-500">Loading ads...</div>
+          <div className="text-center py-20 text-xl">Loading ads...</div>
         ) : error ? (
           <div className="text-center text-red-600">{error}</div>
         ) : (
           [...Array(pages)].map((_, index) => (
             <div
               key={index + 1}
-              className="w-[210mm] h-[297mm] bg-white shadow-lg overflow-hidden rounded-lg m-0 p-0"
+              className="w-[210mm] h-[297mm] shadow-lg overflow-hidden rounded-lg m-0 p-0"
             >
               {renderAd(index + 1)}
             </div>

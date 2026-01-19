@@ -1,6 +1,7 @@
 import admin from "firebase-admin";
 import User from '../models/user.js';
 import { errorHandler } from "../utils/error.js";
+import bcryptjs from "bcryptjs";
 
 // Email, password, and phone validation functions
 const isValidEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
@@ -44,6 +45,9 @@ export const register = async (req, res, next) => {
       email,
       password,
     });
+
+    const hashPassword = await bcryptjs.hash(password, 10);
+    console.log(hashPassword)
 
     const newUser = new User({
       firebaseUID: firebaseUser.uid,

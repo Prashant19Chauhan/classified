@@ -2,7 +2,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-d
 import { useSelector } from "react-redux";
 import { Suspense, lazy } from "react";
 
-import Header from "./components/Header";
+import Header from "./components/header";
 import PrivateRoute from "./components/PrivateRoute";
 import Loader from "./components/Loader";
 import ScrollToTop from "./components/ScrollToTop";
